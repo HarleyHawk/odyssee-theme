@@ -2200,6 +2200,14 @@ body.theme-light .setting-group .theme-picker button {
         padding: 0.5rem;
         border-radius: 10%
     }
+
+    .header-logo {
+        height: 35px;
+    }
+
+    .header-left {
+        gap: 0.5rem;
+    }
 }
 
 /* Botão hamburger do menu mobile: escondido em desktop, visível em mobile */

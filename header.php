@@ -89,8 +89,14 @@
                 <a href="<?php echo esc_url( home_url() ); ?>" class="logo-link">
                     <img src="<?php echo esc_url( 'https://odysseexp.com/wp-content/uploads/2025/11/typeblack.png' ); ?>" alt="Odyssee Hawk" class="header-logo" id="header-logotype">
                 </a>
-                    <a href="<?php echo esc_url( home_url( '/sobre-mim/' ) ); ?>" class="btn-header-about">
+                    <a href="<?php echo esc_url( home_url( '/sobre-mim/' ) ); ?>" class="btn-header-about" aria-label="Sobre Mim">
                     <svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> <span data-key="sobre-mim">Sobre Mim</span>
+                </a>
+                <a href="<?php echo esc_url( home_url( '/servicos' ) ); ?>" class="btn-header-about" aria-label="Serviços">
+                    <svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg> <span data-key="servicos">Serviços</span>
+                </a>
+                <a href="<?php echo esc_url( home_url( '/posts' ) ); ?>" class="btn-header-about" aria-label="Posts">
+                    <svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> <span data-key="todos-posts">Posts</span>
                 </a>
             </div>
 

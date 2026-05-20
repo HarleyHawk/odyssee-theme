@@ -71,7 +71,7 @@ function odyssee_scripts() {
     $theme_version = wp_get_theme()->get( 'Version' ) ?: '1.0.0';
     
     // CSS principal (minificado em produção)
-    wp_enqueue_style( 'odyssee-style', get_template_directory_uri() . '/style.min.css', array(), $theme_version );
+    wp_enqueue_style( 'odyssee-style', get_template_directory_uri() . '/style.css', array(), $theme_version );
     
     // Fonts (self-hosted) - carregar folha de fontes custom
     wp_enqueue_style( 'odyssee-fonts', get_template_directory_uri() . '/assets/css/fonts.css', array(), $theme_version );
