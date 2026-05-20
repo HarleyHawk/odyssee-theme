@@ -11,7 +11,7 @@
     if (have_posts()) {
         while (have_posts()) {
             the_post();
-            ?>
+    ?>
             <!-- Conteudo completo do post -->
             <article class="single-post-content">
                 <div class="single-post-header">
@@ -36,10 +36,10 @@
 
                 <!-- Acao de retorno para listagem -->
                 <div class="single-post-footer">
-                    <a href="<?php echo esc_url( home_url( '/posts' ) ); ?>" class="btn-back">&larr; Voltar aos Posts</a>
+                    <a href="<?php echo esc_url(home_url('/posts')); ?>" class="btn-back">&larr; Voltar aos Posts</a>
                 </div>
             </article>
-            <?php
+    <?php
         }
     }
     ?>

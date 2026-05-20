@@ -47,7 +47,7 @@ function decodeHtmlEntities(str) {
  */
 function createElement(tag, attrs = {}, content = '') {
     const el = document.createElement(tag);
-    
+
     Object.keys(attrs).forEach(key => {
         if (key === 'class') {
             el.className = attrs[key];
@@ -62,13 +62,13 @@ function createElement(tag, attrs = {}, content = '') {
             el.setAttribute(key, attrs[key]);
         }
     });
-    
+
     if (typeof content === 'string') {
         el.textContent = content;
     } else if (content instanceof HTMLElement) {
         el.appendChild(content);
     }
-    
+
     return el;
 }
 
@@ -79,18 +79,18 @@ function createElement(tag, attrs = {}, content = '') {
  */
 function sanitizeUrl(url) {
     if (!url) return '';
-    
+
     // Whitelist de protocolos seguros
     const safeProtocols = ['http://', 'https://', 'mailto:', 'tel:', 'whatsapp:', '/'];
     const trimmed = url.trim().toLowerCase();
-    
+
     const isSafe = safeProtocols.some(protocol => trimmed.startsWith(protocol));
-    
+
     if (!isSafe) {
         console.warn(`URL insegura detectada e bloqueada: ${url}`);
         return '';
     }
-    
+
     return url;
 }
 
@@ -102,18 +102,18 @@ function sanitizeUrl(url) {
  */
 function sanitizeSearchInput(input) {
     if (!input) return '';
-    
+
     // Remove tags HTML
     let sanitized = input.replace(/<[^>]*>/g, '');
-    
+
     // Remove caracteres especiais perigosos (mantém pontuação comum)
     sanitized = sanitized.replace(/[<>"{};]/g, '');
-    
+
     // Limita o tamanho da busca (previne DoS)
     if (sanitized.length > 200) {
         sanitized = sanitized.substring(0, 200);
     }
-    
+
     return sanitized.trim();
 }
 
@@ -257,7 +257,7 @@ translations.en['ilustracao-resumo-title'] = 'Your Service';
 // Throttle: limita a frequência de execução de uma função
 function throttle(func, limit) {
     let inThrottle;
-    return function(...args) {
+    return function (...args) {
         if (!inThrottle) {
             func.apply(this, args);
             inThrottle = true;
@@ -269,7 +269,7 @@ function throttle(func, limit) {
 // Debounce: aguarda o usuário parar de disparar o evento para executar
 function debounce(func, delay) {
     let timeoutId;
-    return function(...args) {
+    return function (...args) {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
@@ -318,17 +318,17 @@ const postTitleTranslations = {
 // Prioridade: 1) custom field post_title_en  2) glossário manual  3) título original
 function getPostTitleTranslation(postTitle, customMetaEN) {
     if (!postTitle) return '';
-    
+
     // 1. Se existir custom field 'post_title_en' no post, usa
     if (customMetaEN && customMetaEN.trim()) {
         return customMetaEN;
     }
-    
+
     // 2. Se existir no glossário, usa
     if (postTitleTranslations[postTitle]) {
         return postTitleTranslations[postTitle];
     }
-    
+
     // 3. Senão retorna vazio para manter original
     return '';
 }
@@ -465,18 +465,18 @@ const wpConfig = {
 // ========== FUNÇÃO PARA EXTRAIR EXCERPT DO CONTEÚDO ==========
 function extractExcerpt(htmlContent, maxLength = 150) {
     if (!htmlContent) return '';
-    
+
     // Remove tags HTML
     let text = htmlContent.replace(/<[^>]*>/g, '');
-    
+
     // Remove múltiplos espaços
     text = text.replace(/\s+/g, ' ').trim();
-    
+
     // Se for mais longo que maxLength, corta e adiciona "..."
     if (text.length > maxLength) {
         text = text.substring(0, maxLength).trim() + '...';
     }
-    
+
     return text;
 }
 
@@ -515,7 +515,7 @@ async function fetchRealPosts() {
         const cached = (window.safeStorage && window.safeStorage.getItem(cacheKey)) || null;
         const cacheTime = (window.safeStorage && window.safeStorage.getItem(cacheKey + '_time')) || null;
         const now = Date.now();
-        
+
         if (cached && cacheTime && (now - parseInt(cacheTime)) < wpConfig.cacheExpire) {
             console.log('[CACHE] Posts recuperados do cache local');
             allPosts = JSON.parse(cached);
@@ -524,8 +524,12 @@ async function fetchRealPosts() {
 
         console.log('[API] Buscando posts de:', wpConfig.baseUrl + '/wp-json/wp/v2/posts');
 
-        // Pega os posts do seu site (com imagens e categorias embutidas)
-        const url = wpConfig.baseUrl + '/wp-json/wp/v2/posts?_embed&per_page=' + wpConfig.postsPerPage;
+        // Pega os posts do seu site utilizando a URL dinâmica fornecida pelo WordPress
+        const restBaseUrl = (typeof odysseeSecure !== 'undefined' && odysseeSecure.restUrl)
+            ? odysseeSecure.restUrl
+            : wpConfig.baseUrl + '/wp-json/';
+
+        const url = restBaseUrl + 'wp/v2/posts?_embed&per_page=' + wpConfig.postsPerPage;
         const response = await fetch(url);
 
         if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
@@ -558,15 +562,15 @@ async function fetchRealPosts() {
             // 4. Tenta achar as categorias PAI e FILHA (SUPORTA MÚLTIPLAS)
             let categoryList = ['geral']; // Array para suportar múltiplas categorias
             let subCategoryList = []; // Array para múltiplas subcategorias
-            
+
             if (post._embedded && post._embedded['wp:term'] && post._embedded['wp:term'][0]) {
                 const terms = post._embedded['wp:term'][0];
-                
+
                 // Separa categorias por nível (parentais vs filhas)
                 // Se a URL tem /category/X/Y/ é filha, se tem /category/X/ é pai
                 const parentCats = [];
                 const childCats = [];
-                
+
                 terms.forEach(cat => {
                     const urlMatch = cat.link.match(/\/category\/([^\/]+)\/([^\/]+)\//);
                     if (urlMatch) {
@@ -577,14 +581,14 @@ async function fetchRealPosts() {
                         parentCats.push(cat);
                     }
                 });
-                
+
                 // Armazena TODAS as categorias pai encontradas
                 if (parentCats.length > 0) {
                     categoryList = parentCats.map(cat => cat.slug);
                 } else if (terms.length > 0) {
                     categoryList = terms.map(t => t.slug);
                 }
-                
+
                 // Armazena TODAS as subcategorias encontradas
                 if (childCats.length > 0) {
                     subCategoryList = childCats.map(cat => cat.slug);
@@ -620,14 +624,14 @@ async function fetchRealPosts() {
         // Remove posts inválidos
         allPosts = allPosts.filter(post => post && post.title && post.image && post.date);
         console.log("[API] Posts válidos após filtro:", allPosts.length);
-        
+
         // Salva no cache local
         try {
             if (window.safeStorage) {
                 window.safeStorage.setItem(cacheKey, JSON.stringify(allPosts));
                 window.safeStorage.setItem(cacheKey + '_time', now.toString());
             } else {
-                try { localStorage.setItem(cacheKey, JSON.stringify(allPosts)); localStorage.setItem(cacheKey + '_time', now.toString()); } catch(e){}
+                try { localStorage.setItem(cacheKey, JSON.stringify(allPosts)); localStorage.setItem(cacheKey + '_time', now.toString()); } catch (e) { }
             }
             console.log('[CACHE] Posts salvos em cache local');
         } catch (e) {
@@ -747,10 +751,10 @@ function parseWpPrices(obj) {
     }
     return parsed;
 }
-const allPrices = Object.assign( {}, defaultPrices,
+const allPrices = Object.assign({}, defaultPrices,
     (typeof odysseePrecos !== 'undefined' && odysseePrecos.prices) ? parseWpPrices(odysseePrecos.prices) : {}
 );
-const unitPrices = Object.assign( {}, defaultUnitPrices,
+const unitPrices = Object.assign({}, defaultUnitPrices,
     (typeof odysseePrecos !== 'undefined' && odysseePrecos.unitPrices) ? parseWpPrices(odysseePrecos.unitPrices) : {}
 );
 
@@ -759,7 +763,7 @@ const unitPrices = Object.assign( {}, defaultUnitPrices,
 // Cada produto é convertido de formato PHP para formato JS:
 //   PHP: {id, nome, categoria, tipo, descricao, informativo, itens, thumbnail, preco}
 //   JS:  {id, title, desc, informativo, image, icon, category, tipo, items, price}
-const customProducts = (function() {
+const customProducts = (function () {
     if (typeof odysseeProdutos === 'undefined') return [];
     // wp_localize_script converte arrays PHP em objetos JS indexados por número
     const arr = [];
@@ -797,10 +801,10 @@ const customProducts = (function() {
 // mensagem do WhatsApp com o nome da categoria.
 // ==============================================
 const categoryMap = {
-    'design-grafico':  { label: 'Design Gráfico',      gridId: 'design-services-grid',          packageGridId: 'design-packages-grid' },
-    'edicao-de-video': { label: 'Edição de Vídeo',      gridId: 'video-services-grid',           packageGridId: 'video-packages-grid' },
-    'motion':          { label: 'Motion Graphics',       gridId: 'motion-graphics-services-grid', packageGridId: 'motion-graphics-services-grid' },
-    'ilustracao':      { label: 'Ilustração Digital',    gridId: 'ilustracao-estilos',            packageGridId: 'ilustracao-estilos' },
+    'design-grafico': { label: 'Design Gráfico', gridId: 'design-services-grid', packageGridId: 'design-packages-grid' },
+    'edicao-de-video': { label: 'Edição de Vídeo', gridId: 'video-services-grid', packageGridId: 'video-packages-grid' },
+    'motion': { label: 'Motion Graphics', gridId: 'motion-graphics-services-grid', packageGridId: 'motion-graphics-services-grid' },
+    'ilustracao': { label: 'Ilustração Digital', gridId: 'ilustracao-estilos', packageGridId: 'ilustracao-estilos' },
 };
 
 /**
@@ -948,8 +952,8 @@ const ilustracaoDigitalServices = [
 // ==============================================
 if (typeof odysseeOverrides !== 'undefined') {
     const allServiceArrays = [designServices, designPackages, videoServices, videoPackages, motionGraphicsServices, ilustracaoDigitalServices];
-    allServiceArrays.forEach(function(arr) {
-        arr.forEach(function(svc) {
+    allServiceArrays.forEach(function (arr) {
+        arr.forEach(function (svc) {
             const override = odysseeOverrides[svc.id];
             if (override) {
                 if (override.nome) svc.title = override.nome;
@@ -1000,14 +1004,14 @@ function renderDesignServices() {
             const price = allPrices[service.id];
             const priceString = price ? `R$ ${price.toFixed(2).replace('.', ',')}` : (translations[currentLanguage] && translations[currentLanguage]['consulte'] ? translations[currentLanguage]['consulte'] : 'Consulte');
 
-                const svcTitle = getServiceTitle(service.id);
-                const svcDesc = getServiceDesc(service.id) || service.desc || '';
-                const hireLabel = translations[currentLanguage] && translations[currentLanguage]['btn-hire'] ? translations[currentLanguage]['btn-hire'] : 'Contratar';
-                const whatsappMsg = encodeURIComponent(`Olá, gostaria de apresentar a minha ideia e solicitar um orçamento para o produto/serviço: *Design Gráfico - ${svcTitle.replace(/<[^>]*>/g, '')}*.`);
-                const whatsappLink = `https://wa.me/5511963208691?text=${whatsappMsg}`;
-                const infoText = getServiceInfo(service.id) || 'Tempo de entrega: 3-5 dias úteis. Inclui 2 revisões. Formato final em alta resolução.';
-                const thumbnailHTML = service.image ? `<img class="service-thumb-img" src="${service.image}" alt="${svcTitle}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect width=%22300%22 height=%22180%22 fill=%22%23ccc%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESem%20Imagem%3C/text%3E%3C/svg%3E';">` : (service.icon ? `<i class="${service.icon}"></i>` : '');
-                servicesGrid.innerHTML += `
+            const svcTitle = getServiceTitle(service.id);
+            const svcDesc = getServiceDesc(service.id) || service.desc || '';
+            const hireLabel = translations[currentLanguage] && translations[currentLanguage]['btn-hire'] ? translations[currentLanguage]['btn-hire'] : 'Contratar';
+            const whatsappMsg = encodeURIComponent(`Olá, gostaria de apresentar a minha ideia e solicitar um orçamento para o produto/serviço: *Design Gráfico - ${svcTitle.replace(/<[^>]*>/g, '')}*.`);
+            const whatsappLink = `https://wa.me/5511963208691?text=${whatsappMsg}`;
+            const infoText = getServiceInfo(service.id) || 'Tempo de entrega: 3-5 dias úteis. Inclui 2 revisões. Formato final em alta resolução.';
+            const thumbnailHTML = service.image ? `<img class="service-thumb-img" src="${service.image}" alt="${svcTitle}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect width=%22300%22 height=%22180%22 fill=%22%23ccc%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESem%20Imagem%3C/text%3E%3C/svg%3E';">` : (service.icon ? `<i class="${service.icon}"></i>` : '');
+            servicesGrid.innerHTML += `
                     <div class="service-card">
                         <div class="service-thumbnail">${thumbnailHTML}</div>
                         <div class="service-content">
@@ -1037,21 +1041,21 @@ function renderDesignServices() {
             // Cria o HTML da lista de itens
             const itemsHTML = pkg.items.map(item => `<li><i class="fa fa-check-circle"></i> ${item}</li>`).join('');
 
-                const pkgTitle = getPackageTitle(pkg.id) || pkg.title;
-                const pkgItems = getPackageItems(pkg.id).length ? getPackageItems(pkg.id) : pkg.items;
-                const itemsHTMLTranslated = pkgItems.map(item => `<li><i class="fa fa-check-circle"></i> ${item}</li>`).join('');
-                const hireLabelPkg = translations[currentLanguage] && translations[currentLanguage]['btn-hire'] ? translations[currentLanguage]['btn-hire'] : 'Contratar';
-                const whatsappMsgPkg = encodeURIComponent(`Olá, gostaria de apresentar a minha ideia e solicitar um orçamento para o produto/serviço: *Design Gráfico - ${pkgTitle.replace(/<[^>]*>/g, '')}*.`);
-                const whatsappLinkPkg = `https://wa.me/5511963208691?text=${whatsappMsgPkg}`;
-                const pkgIconHTML = pkg.icon ? (`<i class="${pkg.icon} package-icon-inline" aria-hidden="true"></i>` + `<svg class="package-icon-svg icon-svg small" role="img" aria-hidden="true" style="display:none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/></svg>`) : (pkg.iconImage ? `<img class="package-icon" src="${pkg.iconImage}" alt="${pkgTitle.replace(/<[^>]*>/g, '')}">` : '');
-                packagesGrid.innerHTML += `
+            const pkgTitle = getPackageTitle(pkg.id) || pkg.title;
+            const pkgItems = getPackageItems(pkg.id).length ? getPackageItems(pkg.id) : pkg.items;
+            const itemsHTMLTranslated = pkgItems.map(item => `<li><i class="fa fa-check-circle"></i> ${item}</li>`).join('');
+            const hireLabelPkg = translations[currentLanguage] && translations[currentLanguage]['btn-hire'] ? translations[currentLanguage]['btn-hire'] : 'Contratar';
+            const whatsappMsgPkg = encodeURIComponent(`Olá, gostaria de apresentar a minha ideia e solicitar um orçamento para o produto/serviço: *Design Gráfico - ${pkgTitle.replace(/<[^>]*>/g, '')}*.`);
+            const whatsappLinkPkg = `https://wa.me/5511963208691?text=${whatsappMsgPkg}`;
+            const pkgIconHTML = pkg.icon ? (`<i class="${pkg.icon} package-icon-inline" aria-hidden="true"></i>` + `<svg class="package-icon-svg icon-svg small" role="img" aria-hidden="true" style="display:none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/></svg>`) : (pkg.iconImage ? `<img class="package-icon" src="${pkg.iconImage}" alt="${pkgTitle.replace(/<[^>]*>/g, '')}">` : '');
+            packagesGrid.innerHTML += `
                     <div class="service-card package-card">
                         <h3>${pkgIconHTML} ${pkgTitle}</h3>
                         <ul class="package-items">${itemsHTMLTranslated}</ul>
                         <p>${priceString}</p>
                         ${discountHTML} <a href="${whatsappLinkPkg}" target="_blank" rel="noopener noreferrer"><button>${hireLabelPkg}</button></a>
                     </div>
-                `; 
+                `;
         });
     }
 }
@@ -1199,9 +1203,9 @@ function renderilustracaoConfigurador() {
             card.dataset.id = estiloId;
             card.style.cursor = 'pointer';
             card.addEventListener('click', () => selecionarEstiloIlustracao(estiloId));
-            
+
             const thumbnailHTML = serviceData.image ? `<img class="service-thumb-img" src="${serviceData.image}" alt="${serviceData.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect width=%22300%22 height=%22180%22 fill=%22%23ccc%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESem%20Imagem%3C/text%3E%3C/svg%3E';">` : '';
-            
+
             card.innerHTML = `
                 <div class="service-thumbnail">${thumbnailHTML}</div>
                 <div class="service-content">
@@ -1231,9 +1235,9 @@ function renderilustracaoConfigurador() {
                 card.dataset.id = tipoId;
                 card.style.cursor = 'pointer';
                 card.addEventListener('click', () => selecionarTipoIlustracao(tipoId));
-                
+
                 const thumbnailHTML = serviceData.image ? `<img class="service-thumb-img" src="${serviceData.image}" alt="${serviceData.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect width=%22300%22 height=%22180%22 fill=%22%23ccc%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESem%20Imagem%3C/text%3E%3C/svg%3E';">` : '';
-                
+
                 card.innerHTML = `
                     <div class="service-thumbnail">${thumbnailHTML}</div>
                     <div class="service-content">
@@ -1299,11 +1303,11 @@ function renderilustracaoConfigurador() {
                 card.dataset.id = adicionalId;
                 card.style.cursor = 'pointer';
                 card.addEventListener('click', () => selecionarAdicionalIlustracao(adicionalId));
-                
+
                 const thumbnailHTML = image ? `<img class="service-thumb-img" src="${image}" alt="${title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22%3E%3Crect width=%22300%22 height=%22180%22 fill=%22%23ccc%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2216%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22%3ESem%20Imagem%3C/text%3E%3C/svg%3E';">` : '';
-                
+
                 const price = adicionalId === 'nenhum' ? 0 : (allPrices[adicionalId] || 0);
-                
+
                 card.innerHTML = `
                     <div class="service-thumbnail">${thumbnailHTML}</div>
                     <div class="service-content">
@@ -1397,7 +1401,7 @@ function mostrarResumoIlustracao() {
     // Puxar dados dos serviços
     const estiloData = ilustracaoDigitalServices.find(s => s.id === ilustracaoSelecionada.estilo);
     const tipoData = ilustracaoDigitalServices.find(s => s.id === ilustracaoSelecionada.tipo);
-    
+
     const estiloTitle = estiloData ? estiloData.title : '';
     const tipoTitle = tipoData ? tipoData.title : '';
 
@@ -1439,7 +1443,7 @@ function mostrarResumoIlustracao() {
 function renderilustracaoDigitalServices() {
     // Agora renderiza o configurador em vez dos cards individuais
     renderilustracaoConfigurador();
-}    
+}
 
 // ==============================================
 // ESTADO GLOBAL E ELEMENTOS DOM
@@ -1522,27 +1526,29 @@ function translatePage() {
     if (faleBtn && translations[currentLanguage] && translations[currentLanguage]['fale-whatsapp']) faleBtn.textContent = translations[currentLanguage]['fale-whatsapp'];
 
     // Re-render dynamic service cards (se existirem) para aplicar traduções
-    try { if (typeof renderDesignServices === 'function') renderDesignServices(); } catch(e) { console.error('[RENDER] renderDesignServices error:', e); }
-    try { if (typeof renderVideoServices === 'function') renderVideoServices(); } catch(e) { console.error('[RENDER] renderVideoServices error:', e); }
-    try { if (typeof rendermotionGraphicsServices === 'function') rendermotionGraphicsServices(); } catch(e) { console.error('[RENDER] rendermotionGraphicsServices error:', e); }
-    try { if (typeof renderilustracaoDigitalServices === 'function') renderilustracaoDigitalServices(); } catch(e) { console.error('[RENDER] renderilustracaoDigitalServices error:', e); }
+    try { if (typeof renderDesignServices === 'function') renderDesignServices(); } catch (e) { console.error('[RENDER] renderDesignServices error:', e); }
+    try { if (typeof renderVideoServices === 'function') renderVideoServices(); } catch (e) { console.error('[RENDER] renderVideoServices error:', e); }
+    try { if (typeof rendermotionGraphicsServices === 'function') rendermotionGraphicsServices(); } catch (e) { console.error('[RENDER] rendermotionGraphicsServices error:', e); }
+    try { if (typeof renderilustracaoDigitalServices === 'function') renderilustracaoDigitalServices(); } catch (e) { console.error('[RENDER] renderilustracaoDigitalServices error:', e); }
     // Renderizar produtos custom do admin (após os hardcoded)
-    try { if (typeof renderCustomProducts === 'function') renderCustomProducts(); } catch(e) { console.error('[RENDER] renderCustomProducts error:', e); }
-    
+    try { if (typeof renderCustomProducts === 'function') renderCustomProducts(); } catch (e) { console.error('[RENDER] renderCustomProducts error:', e); }
+
     // Re-render tag pills com tradução
-    try { if (typeof renderTagPills === 'function') renderTagPills(); } catch(e) { console.error('[RENDER] renderTagPills error:', e); }
-    
+    try { if (typeof renderTagPills === 'function') renderTagPills(); } catch (e) { console.error('[RENDER] renderTagPills error:', e); }
+
     // Re-render blog posts com textos traduzidos
     const grid = document.querySelector('.post-grid');
     if (grid && grid.children.length > 0) {
-        try { renderBlog(); } catch(e) { console.error('[RENDER] renderBlog error:', e); }
+        try { renderBlog(); } catch (e) { console.error('[RENDER] renderBlog error:', e); }
     }
 
     // Habilita indicadores de swipe nas grids de serviços em mobile
-    try { if (typeof enableServiceGridMobileScrollHints === 'function') {
-        // Deixa um timeout pequeno para garantir que o DOM tenha sido atualizado
-        setTimeout(enableServiceGridMobileScrollHints, 120);
-    } } catch(e) { console.error('[RENDER] enableServiceGridMobileScrollHints error:', e); }
+    try {
+        if (typeof enableServiceGridMobileScrollHints === 'function') {
+            // Deixa um timeout pequeno para garantir que o DOM tenha sido atualizado
+            setTimeout(enableServiceGridMobileScrollHints, 120);
+        }
+    } catch (e) { console.error('[RENDER] enableServiceGridMobileScrollHints error:', e); }
 }
 
 // --- Mobile: indicador de swipe e melhoria de scroll para grids de serviços ---
@@ -1566,13 +1572,13 @@ function enableServiceGridMobileScrollHints() {
         if (grid.scrollWidth > grid.clientWidth + 10) {
             const hint = document.createElement('div');
             hint.className = 'swipe-hint';
-            hint.innerHTML = `<span class="swipe-text">${(translations[currentLanguage] && translations[currentLanguage]['swipe'] ) ? translations[currentLanguage]['swipe'] : 'Swipe' }</span> <span class="swipe-chevron"><i class="fas fa-chevron-right"></i></span>`;
+            hint.innerHTML = `<span class="swipe-text">${(translations[currentLanguage] && translations[currentLanguage]['swipe']) ? translations[currentLanguage]['swipe'] : 'Swipe'}</span> <span class="swipe-chevron"><i class="fas fa-chevron-right"></i></span>`;
             grid.appendChild(hint);
 
             // Esconder o hint ao primeiro scroll ou toque
             const hideHint = () => {
                 hint.style.opacity = '0';
-                setTimeout(() => { try { hint.remove(); } catch(e){} }, 300);
+                setTimeout(() => { try { hint.remove(); } catch (e) { } }, 300);
                 grid.removeEventListener('touchstart', hideHint);
                 grid.removeEventListener('scroll', hideHint);
             };
@@ -1585,14 +1591,14 @@ function enableServiceGridMobileScrollHints() {
 
 function selectLanguage(lang) {
     currentLanguage = lang;
-    if (window.safeStorage) { window.safeStorage.setItem('userLang', lang); } else { try { localStorage.setItem('userLang', lang); } catch(e){} }
+    if (window.safeStorage) { window.safeStorage.setItem('userLang', lang); } else { try { localStorage.setItem('userLang', lang); } catch (e) { } }
     translatePage();
     if (container) container.classList.add('show-theme');
 }
 
 function finalizarOnboarding() {
     body.classList.remove('modo-onboarding');
-    if (window.safeStorage) { window.safeStorage.setItem('onboardingFeito', 'sim'); } else { try { localStorage.setItem('onboardingFeito', 'sim'); } catch(e){} }
+    if (window.safeStorage) { window.safeStorage.setItem('onboardingFeito', 'sim'); } else { try { localStorage.setItem('onboardingFeito', 'sim'); } catch (e) { } }
 }
 
 function openSettings() {
@@ -1624,7 +1630,7 @@ function createCard(post) {
     const card = document.createElement('div');
     card.className = 'carousel-card';
     let isDragging = false;
-    
+
     // DRAGGABLE FALSE É CRUCIAL
     card.innerHTML = `
         <img src="${escapeHtml(post.image)}" class="carousel-img" alt="${escapeHtml(post.title)}" draggable="false" loading="lazy">
@@ -1633,20 +1639,20 @@ function createCard(post) {
             <span class="carousel-date">${new Date(post.date).toLocaleDateString(currentLanguage === 'en' ? 'en-US' : 'pt-BR')}</span>
         </div>
     `;
-    
+
     // Detecta se está arrastando ou clicando
     let startPos = 0;
     card.addEventListener('mousedown', (e) => {
         startPos = e.pageX;
         isDragging = false;
     });
-    
+
     card.addEventListener('mousemove', (e) => {
         if (Math.abs(e.pageX - startPos) > 5) {
             isDragging = true;
         }
     });
-    
+
     // Adiciona evento de clique apenas se não estiver arrastando
     card.addEventListener('click', (e) => {
         if (!isDragging && post.link) {
@@ -1655,7 +1661,7 @@ function createCard(post) {
         }
         isDragging = false;
     });
-    
+
     card.style.cursor = 'pointer';
     return card;
 }
@@ -1673,17 +1679,17 @@ function renderCarousel(containerId, filterCategory = null) {
     let filteredPosts = allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (filterCategory) {
         // Filtra posts que têm a categoria (pode estar em categories array)
-        filteredPosts = filteredPosts.filter(post => 
+        filteredPosts = filteredPosts.filter(post =>
             post.categories && post.categories.includes(filterCategory)
         );
     }
-    
+
     const basePosts = filteredPosts.slice(0, 8);
 
     // 2. Criar o Trilho
     const track = document.createElement('div');
     track.className = 'carousel-track';
-    
+
     // 3. TRIPLA DUPLICAÇÃO (Set A + Set B + Set C)
     // Isso garante que sempre temos conteúdo para esquerda e direita
     const triplePosts = [...basePosts, ...basePosts, ...basePosts];
@@ -1740,8 +1746,8 @@ function renderCarousel(containerId, filterCategory = null) {
                 const rectC = startC.getBoundingClientRect();
                 calculatedWidth = Math.round(rectC.left - rectB.left);
             }
-        } catch (e) {}
-        
+        } catch (e) { }
+
         singleSetWidth = calculatedWidth;
 
         // Inicialização
@@ -1753,7 +1759,7 @@ function renderCarousel(containerId, filterCategory = null) {
         // Auto-scroll apenas quando NÃO está em drag
         if (!isDown && !isHovering && initialized) {
             position -= speed;
-            
+
             // Teleporte infinito
             if (position <= -(singleSetWidth * 2)) {
                 position += singleSetWidth;
@@ -1764,7 +1770,7 @@ function renderCarousel(containerId, filterCategory = null) {
 
         // Aplica transform
         track.style.transform = `translateX(${position}px)`;
-        
+
         // Continua o loop
         animationId = requestAnimationFrame(animate);
     }
@@ -1784,7 +1790,7 @@ function renderCarousel(containerId, filterCategory = null) {
                 const rectC = startC.getBoundingClientRect();
                 singleSetWidth = Math.round(rectC.left - rectB.left);
             }
-        } catch (e) {}
+        } catch (e) { }
 
         if (totalWidth > 0 && singleSetWidth > 0) {
             position = -singleSetWidth;
@@ -1912,7 +1918,7 @@ const colorDots = document.querySelectorAll('.color-dot');
 function applyTheme(theme) {
     body.classList.remove('theme-light', 'theme-dark');
     body.classList.add(`theme-${theme}`);
-    if (window.safeStorage) { window.safeStorage.setItem('userTheme', theme); } else { try { localStorage.setItem('userTheme', theme); } catch(e){} }
+    if (window.safeStorage) { window.safeStorage.setItem('userTheme', theme); } else { try { localStorage.setItem('userTheme', theme); } catch (e) { } }
 }
 
 if (btnLight) btnLight.addEventListener('click', () => applyTheme('light'));
@@ -1948,24 +1954,24 @@ colorDots.forEach(dot => {
         if (newColor) {
             body.classList.remove('color-blue', 'color-purple', 'color-red', 'color-yellow', 'color-green');
             body.classList.add(`color-${newColor}`);
-            if (window.safeStorage) { window.safeStorage.setItem('userColor', newColor); } else { try { localStorage.setItem('userColor', newColor); } catch(e){} }
+            if (window.safeStorage) { window.safeStorage.setItem('userColor', newColor); } else { try { localStorage.setItem('userColor', newColor); } catch (e) { } }
         }
     });
 });
 
 document.getElementById('set-lang-pt')?.addEventListener('click', () => {
     currentLanguage = 'pt';
-    if (window.safeStorage) { window.safeStorage.setItem('userLang', 'pt'); } else { try { localStorage.setItem('userLang', 'pt'); } catch(e){} }
+    if (window.safeStorage) { window.safeStorage.setItem('userLang', 'pt'); } else { try { localStorage.setItem('userLang', 'pt'); } catch (e) { } }
     translatePage();
     // Notifica outras partes do app (como a página Sobre) que o idioma mudou
-    try { window.dispatchEvent(new CustomEvent('odyssee-storage', { detail: { key: 'userLang', value: 'pt' } })); } catch(e) {}
+    try { window.dispatchEvent(new CustomEvent('odyssee-storage', { detail: { key: 'userLang', value: 'pt' } })); } catch (e) { }
 });
 document.getElementById('set-lang-en')?.addEventListener('click', () => {
     currentLanguage = 'en';
-    if (window.safeStorage) { window.safeStorage.setItem('userLang', 'en'); } else { try { localStorage.setItem('userLang', 'en'); } catch(e){} }
+    if (window.safeStorage) { window.safeStorage.setItem('userLang', 'en'); } else { try { localStorage.setItem('userLang', 'en'); } catch (e) { } }
     translatePage();
     // Notifica outras partes do app (como a página Sobre) que o idioma mudou
-    try { window.dispatchEvent(new CustomEvent('odyssee-storage', { detail: { key: 'userLang', value: 'en' } })); } catch(e) {}
+    try { window.dispatchEvent(new CustomEvent('odyssee-storage', { detail: { key: 'userLang', value: 'en' } })); } catch (e) { }
 });
 
 const socialBtn = document.getElementById('social-media-btn');
@@ -1999,12 +2005,12 @@ if (btnSettingsMobile) {
 
 /* --- 4. INICIALIZAÇÃO --- */
 // Global error handlers to avoid silent failures and help debugging
-window.addEventListener('error', (ev) => { try { console.error('[GLOBAL ERROR]', ev.message || ev.error || ev); } catch(e){} });
-window.addEventListener('unhandledrejection', (ev) => { try { console.error('[UNHANDLED REJECTION]', ev.reason); } catch(e){} });
+window.addEventListener('error', (ev) => { try { console.error('[GLOBAL ERROR]', ev.message || ev.error || ev); } catch (e) { } });
+window.addEventListener('unhandledrejection', (ev) => { try { console.error('[UNHANDLED REJECTION]', ev.reason); } catch (e) { } });
 
 // SEGURANÇA: Garantir rel="noopener noreferrer" em todos os links target="_blank"
 // Defesa em profundidade para links criados dinamicamente via innerHTML
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     const link = e.target.closest('a[target="_blank"]');
     if (link && !link.getAttribute('rel')) {
         link.setAttribute('rel', 'noopener noreferrer');
@@ -2039,7 +2045,7 @@ function renderBlog(searchTerm = '', categoryFilter = '') {
 
         // Busca por Categoria (clique nas tags)
         // Verifica se a categoria está no array de categorias do post
-        const catMatch = categoryFilter === '' || 
+        const catMatch = categoryFilter === '' ||
             (post.categories && post.categories.includes(categoryFilter));
 
         return textMatch && catMatch;
@@ -2071,16 +2077,16 @@ function renderBlog(searchTerm = '', categoryFilter = '') {
 
         // Formata a data
         const dateStr = new Date(post.date).toLocaleDateString(currentLanguage === 'en' ? 'en-US' : 'pt-BR');
-        
+
         // Pega traduções
         const verDetalhes = translations[currentLanguage]['ver-detalhes'] || 'Ver Detalhes';
         const portfolioText = translations[currentLanguage]['portfolio'] || 'portfolio';
-        
+
         // Traduz TODAS as categorias (suporta múltiplas)
         const categoriesTranslated = post.categories.map(cat => {
             const categoryKey = wpSlugToCategoryKey[cat] || cat;
-            return translations[currentLanguage][categoryKey] || 
-                   cat.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            return translations[currentLanguage][categoryKey] ||
+                cat.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
         });
 
         // Traduz TODAS as subcategorias também
@@ -2088,8 +2094,8 @@ function renderBlog(searchTerm = '', categoryFilter = '') {
         if (post.subCategories && post.subCategories.length > 0) {
             subCategoriesTranslated = post.subCategories.map(subCat => {
                 const subCategoryKey = wpSlugToCategoryKey[subCat] || subCat;
-                return translations[currentLanguage][subCategoryKey] || 
-                       subCat.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                return translations[currentLanguage][subCategoryKey] ||
+                    subCat.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
             });
         }
 
@@ -2105,14 +2111,14 @@ function renderBlog(searchTerm = '', categoryFilter = '') {
                 console.log(`[TRADUÇÃO] Título não traduzido: "${post.title}" → adicione em postTitleTranslations ou no custom field 'post_title_en'`);
             }
         }
-        
+
         // Extrai excerpt do conteúdo real do post (primeiras 150 caracteres)
         const excerptText = extractExcerpt(post.content, 150);
-        
+
         // Renderiza TODAS as categorias e subcategorias
         const categoriesHTML = categoriesTranslated.map(cat => `<span class="post-category">${escapeHtml(cat)}</span>`).join('');
         const subCategoriesHTML = subCategoriesTranslated.map(subCat => `<span class="post-sub-category">${escapeHtml(subCat)}</span>`).join('');
-        
+
         card.innerHTML = `
             <img src="${escapeHtml(post.image)}" class="post-thumbnail" alt="${escapeHtml(postTitle)}">
             <div class="post-content">
@@ -2125,7 +2131,7 @@ function renderBlog(searchTerm = '', categoryFilter = '') {
                 <button class="btn-primary">${verDetalhes}</button>
             </div>
         `;
-        
+
         // Adiciona evento de clique para redirecionar para o post individual
         card.style.cursor = 'pointer';
         card.addEventListener('click', () => {
@@ -2134,7 +2140,7 @@ function renderBlog(searchTerm = '', categoryFilter = '') {
                 if (safeLink) window.location.href = safeLink;
             }
         });
-        
+
         grid.appendChild(card);
     });
 }
@@ -2145,11 +2151,11 @@ function renderBlog(searchTerm = '', categoryFilter = '') {
 function renderTagPills() {
     const suggestedTags = document.querySelector('.suggested-tags');
     if (!suggestedTags) return;
-    
+
     // Remove os botões antigos (mantém o span "Filtrar por:")
     const existingPills = suggestedTags.querySelectorAll('.tag-pill');
     existingPills.forEach(pill => pill.remove());
-    
+
     // Define as categorias (use slugs reais retornados pelo WP em `post.category`)
     const categories = [
         { id: '', label: 'todos' },
@@ -2159,19 +2165,19 @@ function renderTagPills() {
         { id: 'ilustracao-digital', label: 'ilustracao' },
         { id: 'impressos', label: 'impressos' }
     ];
-    
+
     // Cria os botões
     categories.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = 'tag-pill';
         btn.dataset.tag = cat.id;
-        
+
         // Pega a tradução
         const translation = translations[currentLanguage][cat.label] || cat.label;
         btn.textContent = translation;
-        
+
         suggestedTags.appendChild(btn);
-        
+
         // Adiciona listener para filtro
         btn.addEventListener('click', () => {
             // Remove classe ativa de todos
@@ -2193,15 +2199,15 @@ const searchInput = document.getElementById('search-input');
 if (searchInput) {
     searchInput.addEventListener('input', (e) => {
         let searchValue = e.target.value;
-        
+
         // Sanitizar: remover tags HTML e caracteres perigosos
         searchValue = sanitizeSearchInput(searchValue);
-        
+
         // Atualizar input se foi alterado (remover tags)
         if (searchValue !== e.target.value) {
             e.target.value = searchValue;
         }
-        
+
         renderBlog(searchValue);
     });
 }
@@ -2240,24 +2246,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==============================================
     // SEGURANÇA: Event listeners (remover onclick)
     // ==============================================
-    
+
     // Botões de seleção de idioma (substituir onclick)
     const langPtBtn = document.getElementById('lang-pt');
     const langEnBtn = document.getElementById('lang-en');
-    
+
     if (langPtBtn) {
         langPtBtn.addEventListener('click', () => selectLanguage('pt'));
     }
     if (langEnBtn) {
         langEnBtn.addEventListener('click', () => selectLanguage('en'));
     }
-    
+
     // Botão continuar do onboarding (substituir onclick)
     const btnContinuar = document.getElementById('btn-continuar');
     if (btnContinuar) {
         btnContinuar.addEventListener('click', finalizarOnboarding);
     }
-    
+
     // Renderizar tags
     renderTagPills();
     detectFontAwesomeAndEnableSvgFallback();

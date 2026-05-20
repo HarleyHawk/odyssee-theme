@@ -6,79 +6,79 @@
     --color-title: #650CA4;
     --color-subtitle: #28123D;
     --color-text: #000000;
-    --color-btn-bg: #ebebeb
+    --color-btn-bg: #ebebeb;
 }
 
 body.color-blue {
     --bg-page: #D5E8FF;
     --color-accent: #5371E2;
     --color-title: #0A2E6F;
-    --color-subtitle: #15263B
+    --color-subtitle: #15263B;
 }
 
 body.color-purple {
-    --bg-page: #E9D5FF;
+    --bg-page: #f4eaff;
     --color-accent: #9E51FF;
     --color-title: #650CA4;
-    --color-subtitle: #28123D
+    --color-subtitle: #28123D;
 }
 
 body.color-green {
-    --bg-page: #A9CDB5;
+    --bg-page: #f3fff7;
     --color-accent: #1EB558;
     --color-title: #043A00;
-    --color-subtitle: #0C1C0B
+    --color-subtitle: #0C1C0B;
 }
 
 body.color-yellow {
-    --bg-page: #DCD7BC;
-    --color-accent: #E5A80C;
-    --color-title: #5B3E00;
-    --color-subtitle: #1A170C
+    --bg-page: #fffbf3;
+    --color-accent: #d29512;
+    --color-title: #411809;
+    --color-subtitle: #120f03;
 }
 
 body.color-red {
-    --bg-page: #E5A6B1;
+    --bg-page: #ffe9ed;
     --color-accent: #D6183A;
     --color-title: #77002D;
-    --color-subtitle: #1C0B0B
+    --color-subtitle: #1C0B0B;
 }
 
 body.theme-dark {
     --bg-card: #1E1E1E;
     --color-text: #FFFFFF;
     --color-subtitle: #FFFFFF;
-    --color-btn-bg: #333333
+    --color-btn-bg: #333333;
 }
 
 body.theme-dark.color-blue {
     --bg-page: #1D283A;
     --color-accent: #373CB7;
-    --color-title: #3979DC
+    --color-title: #3979DC;
 }
 
 body.theme-dark.color-purple {
     --bg-page: #221D3A;
     --color-accent: #7C3AED;
-    --color-title: #C084FC
+    --color-title: #C084FC;
 }
 
 body.theme-dark.color-green {
     --bg-page: #162721;
     --color-accent: #216F24;
-    --color-title: #41BC44
+    --color-title: #41BC44;
 }
 
 body.theme-dark.color-yellow {
     --bg-page: #272716;
     --color-accent: #948217;
-    --color-title: #E7CF41
+    --color-title: #E7CF41;
 }
 
 body.theme-dark.color-red {
     --bg-page: #3A1D2E;
     --color-accent: #B72E2E;
-    --color-title: #E9675A
+    --color-title: #E9675A;
 }
 
 body.theme-dark h2,

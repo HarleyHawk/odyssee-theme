@@ -37,12 +37,24 @@ function odyssee_security_headers() {
 
     $nonce = odyssee_generate_csp_nonce();
 
+    // Detecta se está em localhost/XAMPP para não forçar HTTPS e quebrar imagens locais
+    $is_localhost = isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false);
+
+    // Content Security Policy base
+    $csp_policy = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://odysseexp.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';";
+    
+    if ( ! $is_localhost ) {
+        $csp_policy .= " upgrade-insecure-requests;";
+    }
+
     // Content Security Policy com nonce (elimina unsafe-inline e unsafe-eval para scripts)
     // Inclui domínios do Google Analytics/GTM para quando for ativado
-    header( "Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://odysseexp.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;" );
+    header( "Content-Security-Policy: " . $csp_policy );
 
-    // HTTP Strict Transport Security (2 anos + preload)
-    header( 'Strict-Transport-Security: max-age=63072000; includeSubDomains; preload' );
+    // HTTP Strict Transport Security (2 anos + preload) - Apenas em produção
+    if ( ! $is_localhost ) {
+        header( 'Strict-Transport-Security: max-age=63072000; includeSubDomains; preload' );
+    }
 
     // Cross-Origin Opener Policy (permite popups para WhatsApp)
     header( 'Cross-Origin-Opener-Policy: same-origin-allow-popups' );
@@ -373,6 +385,31 @@ add_filter( 'wp_inline_script_attributes', function( $attributes ) {
 // ==============================================
 add_filter( 'xmlrpc_enabled', '__return_false' );
 remove_action( 'wp_head', 'wp_generator' );
+
+// Desativar edição de arquivos pelo painel (caso não esteja no wp-config.php)
+if ( ! defined( 'DISALLOW_FILE_EDIT' ) ) {
+    define( 'DISALLOW_FILE_EDIT', true );
+}
+
+// Remover header X-Pingback e fechar pings
+add_action( 'wp_headers', function( $headers ) {
+    unset( $headers['X-Pingback'] );
+    return $headers;
+} );
+add_filter( 'pings_open', '__return_false', 10, 2 );
+
+// Remover versão do WP das URLs de scripts e estilos para dificultar fingerprinting
+function odyssee_remove_wp_version_strings( $src ) {
+    global $wp_version;
+    parse_str( (string) parse_url( $src, PHP_URL_QUERY ), $query );
+    if ( ! empty( $query['ver'] ) && $query['ver'] === $wp_version ) {
+        $src = remove_query_arg( 'ver', $src );
+    }
+    return $src;
+}
+add_filter( 'style_loader_src', 'odyssee_remove_wp_version_strings' );
+add_filter( 'script_loader_src', 'odyssee_remove_wp_version_strings' );
+
 
 // Bloquear enumeração de usuários via REST API
 add_filter( 'rest_endpoints', function( $endpoints ) {
