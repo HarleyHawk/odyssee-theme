@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="52.993336mm"
+   height="52.993351mm"
+   viewBox="0 0 52.993336 52.993351"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1">
+      <rect
+         style="fill:#042784;stroke-width:0.264583;-inkscape-stroke:none;paint-order:stroke markers fill"
+         id="rect2"
+         width="52.993"
+         height="52.993336"
+         x="25.112513"
+         y="0" />
+    </clipPath>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(1.9020687e-6,-68.021307)">
+    <g
+       id="g5"
+       transform="rotate(45,90.167772,180.21231)">
+      <circle
+         style="fill:#b72e2e;fill-opacity:1;stroke-width:0.264583;-inkscape-stroke:none;paint-order:stroke markers fill"
+         id="circle4"
+         cx="15.449535"
+         cy="-164.63954"
+         r="26.49667"
+         transform="scale(-1)" />
+      <circle
+         style="fill:#c0596a;fill-opacity:1;stroke-width:0.264583;-inkscape-stroke:none;paint-order:stroke markers fill"
+         id="circle5"
+         cx="26.49667"
+         cy="26.49667"
+         r="26.49667"
+         clip-path="url(#clipPath1)"
+         transform="rotate(180,5.5235665,95.568103)" />
+      <circle
+         style="fill:#948217;fill-opacity:1;stroke-width:0.264583;-inkscape-stroke:none;paint-order:stroke markers fill"
+         id="circle6"
+         cx="42.414108"
+         cy="-95.407455"
+         r="26.49667"
+         transform="scale(-1)" />
+      <circle
+         style="fill:#e5a80c;fill-opacity:1;stroke-width:0.264583;-inkscape-stroke:none;paint-order:stroke markers fill"
+         id="circle7"
+         cx="26.49667"
+         cy="26.49667"
+         r="26.49667"
+         clip-path="url(#clipPath1)"
+         transform="rotate(180,-7.9587195,60.95206)" />
+      <circle
+         style="fill:#216f24;fill-opacity:1;stroke-width:0.264583;-inkscape-stroke:none;paint-order:stroke markers fill"
+         id="circle8"
+         cx="-7.7606997"
+         cy="-45.232643"
+         r="26.49667"
+         transform="scale(-1)" />
+      <circle
+         style="fill:#1eb558;fill-opacity:1;stroke-width:0.264583;-inkscape-stroke:none;paint-order:stroke markers fill"
+         id="circle9"
+         cx="26.49667"
+         cy="26.49667"
+         r="26.49667"
+         clip-path="url(#clipPath1)"
+         transform="rotate(180,17.128682,35.864658)" />
+    </g>
+  </g>
+</svg>

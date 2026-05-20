@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "php-stubs/wordpress-stubs": "^6.8"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}

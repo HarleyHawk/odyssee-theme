@@ -1,0 +1,13 @@
+/* Placeholder FontAwesome CSS
+   Coloque aqui o conteúdo do arquivo `css/all.min.css` do FontAwesome.
+   Baixe o pacote em https://fontawesome.com (Free) e copie os arquivos:
+   - css/all.min.css -> assets/vendor/font-awesome/css/all.min.css
+   - webfonts/* -> assets/vendor/font-awesome/webfonts/
+
+   Alternativamente, se preferir, instale via pacote npm e copie os arquivos.
+*/
+
+/* IMPORTANTE: Este é um placeholder. Substitua pelo CSS oficial do FontAwesome. */
+
+/* Minimal fallback to ensure icons show a noticeable marker if fonts are missing */
+.fas, .far, .fab { font-style: normal; }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="408"
+   height="408"
+   viewBox="0 0 408 408"
+   fill="none"
+   version="1.1"
+   id="svg18"
+   sodipodi:docname="Bazzite_Color_Long.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="0.59928717"
+     inkscape:cx="881.88105"
+     inkscape:cy="203.57519"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg18" />
+  <path
+     d="M 0,81.6 C 0,36.534 36.534,0 81.6,0 H 204 C 316.666,0 408,91.334 408,204 408,316.666 316.666,408 204,408 91.334,408 0,316.666 0,204 Z"
+     fill="url(#paint0_linear_1016_57)"
+     id="path1"
+     style="fill:url(#paint0_linear_1016_57)" />
+  <path
+     fill-rule="evenodd"
+     clip-rule="evenodd"
+     d="m 104.448,0 h 52.224 v 104.448 h 109.495 c 45.884,0 83.081,37.197 83.081,83.081 0,89.315 -72.404,161.719 -161.719,161.719 -45.884,0 -83.081,-37.197 -83.081,-83.081 V 156.672 H 0 v -52.224 h 104.448 z m 52.224,156.672 v 109.495 c 0,17.042 13.815,30.857 30.857,30.857 60.472,0 109.495,-49.023 109.495,-109.495 0,-17.042 -13.815,-30.857 -30.857,-30.857 z"
+     fill="#ffffff"
+     fill-opacity="0.5"
+     id="path2" />
+  <path
+     d="m 156.672,50.592 c 0,-14.421 -11.691,-26.112 -26.112,-26.112 -14.421,0 -26.112,11.691 -26.112,26.112 v 53.856 H 50.592 c -14.421,0 -26.112,11.691 -26.112,26.112 0,14.421 11.691,26.112 26.112,26.112 h 53.856 v 53.856 c 0,14.421 11.691,26.112 26.112,26.112 14.421,0 26.112,-11.691 26.112,-26.112 v -53.856 h 53.856 c 14.421,0 26.112,-11.691 26.112,-26.112 0,-14.421 -11.691,-26.112 -26.112,-26.112 h -53.856 z"
+     fill="#ffffff"
+     fill-opacity="0.7"
+     id="path3" />
+  <path
+     d="m 212.82,126.23 c 3.333,1.924 3.333,6.736 0,8.66 l -14.376,8.3 c -3.334,1.925 -7.5,-0.481 -7.5,-4.33 v -16.6 c 0,-3.849 4.166,-6.255 7.5,-4.33 z"
+     fill="#ffffff"
+     id="path4" />
+  <path
+     d="m 134.89,212.82 c -1.924,3.333 -6.736,3.333 -8.66,0 l -8.3,-14.376 c -1.925,-3.333 0.481,-7.5 4.33,-7.5 h 16.6 c 3.849,0 6.255,4.167 4.33,7.5 z"
+     fill="#ffffff"
+     id="path5" />
+  <path
+     d="m 126.23,48.3 c 1.924,-3.333 6.736,-3.333 8.66,0 l 8.3,14.376 c 1.925,3.333 -0.481,7.5 -4.33,7.5 h -16.6 c -3.849,0 -6.255,-4.167 -4.33,-7.5 z"
+     fill="#ffffff"
+     id="path6" />
+  <path
+     d="m 48.3,134.89 c -3.334,-1.924 -3.334,-6.736 0,-8.66 l 14.376,-8.3 c 3.333,-1.925 7.5,0.481 7.5,4.33 v 16.6 c 0,3.849 -4.167,6.255 -7.5,4.33 z"
+     fill="#ffffff"
+     id="path7" />
+  <defs
+     id="defs18">
+    <linearGradient
+       id="paint0_linear_1016_57"
+       x1="100"
+       y1="100"
+       x2="508"
+       y2="508"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-100,-100)">
+      <stop
+         offset="0.0684898"
+         stop-color="#0047AB"
+         id="stop15" />
+      <stop
+         offset="0.741212"
+         stop-color="#8A2BE2"
+         id="stop16" />
+    </linearGradient>
+    <linearGradient
+       id="paint1_linear_1016_57"
+       x1="1459.63"
+       y1="161.55"
+       x2="1459.63"
+       y2="218.53"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#59CAFD"
+         id="stop17" />
+      <stop
+         offset="1"
+         stop-color="#2B50EF"
+         id="stop18" />
+    </linearGradient>
+  </defs>
+</svg>
