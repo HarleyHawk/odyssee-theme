@@ -6,7 +6,7 @@
  *
  * Observa mutações no <body> para reagir a trocas de tema/cor.
  */
-(function() {
+(function () {
     /**
      * Mapeamento de URLs de banner por categoria.
      * Chave: "theme-{dark|light} color-{cor}" → Valor: URL da imagem/GIF.
@@ -16,25 +16,25 @@
             'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_1.png',
             'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_5.png',
             'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_3.png',
-            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_2.png',
+            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_2.png',
             'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_4.png',
-            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_6.png',
-            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_7.png',
-            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_8.png',
-            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_9.png',
-            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_10.png'
+            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_6.png',
+            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_7.png',
+            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_8.png',
+            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_9.png',
+            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_10.png'
         },
         'edicao-video': {
             'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_11.png',
-            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_12.png',
+            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_12.png',
             'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_13.png',
             'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_14.png',
             'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_15.png',
-            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_16.png',
-            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_17.png',
-            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_18.png',
-            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_19.png',
-            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_20.png'
+            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_16.png',
+            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_17.png',
+            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_18.png',
+            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_19.png',
+            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_20.png'
         },
         'motion': {
             'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/motiondarkred.gif',
@@ -50,27 +50,27 @@
         },
         'ilustracao': {
             'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_21.png',
-            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_22.png',
+            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_22.png',
             'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_23.png',
             'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_24.png',
             'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_25.png',
-            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_26.png',
-            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_27.png',
-            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_28.png',
-            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_29.png',
-            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_30.png'
+            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_26.png',
+            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_27.png',
+            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_28.png',
+            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_29.png',
+            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_30.png'
         },
         'impressos': {
             'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_31.png',
-            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_32.png',
+            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_32.png',
             'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_33.png',
             'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_34.png',
             'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_35.png',
-            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_36.png',
-            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_37.png',
-            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_38.png',
-            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_39.png',
-            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_40.png'
+            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_36.png',
+            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_37.png',
+            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_38.png',
+            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_39.png',
+            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_40.png'
         }
     };
 
@@ -82,7 +82,7 @@
         const body = document.body;
         const isDark = body.classList.contains('theme-dark');
         const themeClass = isDark ? 'theme-dark' : 'theme-light';
-        
+
         // Detecta a cor
         let colorClass = 'color-purple'; // padrão
         const classList = Array.from(body.classList);
@@ -90,7 +90,7 @@
         if (colorMatch) {
             colorClass = colorMatch;
         }
-        
+
         return `${themeClass} ${colorClass}`;
     }
 
@@ -98,10 +98,10 @@
     function updateCategoryBanner(category) {
         const banner = document.getElementById(`banner-${category}`);
         if (!banner) return;
-        
+
         const currentTheme = getCurrentTheme();
         const bannerUrl = categoryBanners[category] && categoryBanners[category][currentTheme];
-        
+
         if (bannerUrl) {
             banner.src = bannerUrl;
             banner.style.display = 'block';
@@ -127,8 +127,8 @@
 
     // MutationObserver: reage a trocas de classe no <body>
     // (tema dark↔light ou troca de cor) para atualizar banners em tempo real
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
+    const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
             if (mutation.attributeName === 'class') {
                 updateAllBanners();
             }
