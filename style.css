@@ -3,7 +3,7 @@ Theme Name: Odyssee Experience
 Theme URI: https://odysseexp.com
 Author: Harley
 Description: Tema customizado para o site da Odyssee Experience, focado em uma estética moderna e vibrante, com opções de personalização de cores e modo escuro.
-Version: 1.17.0
+Version: 1.17.3
 /* ==========================
    VARIAVEIS GLOBAIS DO TEMA
    ==========================
@@ -614,8 +614,8 @@ body.theme-dark .theme-picker button {
 }
 
 .btn-header-about .icon-svg {
-    width: 1.6rem;
-    height: 1.6rem
+    width: 1.2rem;
+    height: 1.2rem;
 }
 
 /* Em telas menores que 1024px, mantém o botão "Sobre" compacto */
@@ -772,10 +772,18 @@ body.theme-dark .theme-picker button {
     display: block
 }
 
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
 /* Links de navegação e botões do header: sem decoração, cor de subtítulo */
-.main-nav a,
-.secondary-nav button,
-.secondary-nav a {
+.main-nav a:not(.btn-header-about),
+.secondary-nav button:not(.btn-header-about),
+.secondary-nav a:not(.btn-header-about) {
     text-decoration: none;
     color: var(--color-subtitle);
     margin: 0 10px;
@@ -787,9 +795,9 @@ body.theme-dark .theme-picker button {
 }
 
 /* Hover nos links/botões: muda para cor de destaque */
-.main-nav a:hover,
-.secondary-nav button:hover,
-.secondary-nav a:hover {
+.main-nav a:not(.btn-header-about):hover,
+.secondary-nav button:not(.btn-header-about):hover,
+.secondary-nav a:not(.btn-header-about):hover {
     color: var(--color-accent)
 }
 
@@ -800,7 +808,16 @@ body.theme-dark .theme-picker button {
     background: var(--color-accent);
     border-radius: 20px;
     padding: 0.35rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     transition: filter 0.25s
+}
+
+.main-nav a.nav-highlight .icon-svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: currentColor;
 }
 
 .main-nav a.nav-highlight:hover {
@@ -2174,11 +2191,9 @@ body.theme-light .setting-group .theme-picker button {
     gap: 1.5rem
 }
 
-/* Wrapper dos botões no header (desktop e mobile) */
+/* Wrapper dos botões no header (apenas mobile) */
 .header-mobile-buttons {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem
+    display: none;
 }
 
 /* Botão "Sobre" no header: pill colorida com ícone */
@@ -2186,11 +2201,11 @@ body.theme-light .setting-group .theme-picker button {
     background-color: var(--color-accent);
     color: #fff;
     text-decoration: none;
-    padding: 0.5rem 1.2rem;
+    padding: 0.35rem 1rem;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: bold;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
     transition: transform 0.2s ease, background-color 0.2s
@@ -2222,6 +2237,8 @@ body.theme-light .setting-group .theme-picker button {
     }
 
     .header-mobile-buttons {
+        display: flex;
+        align-items: center;
         margin-left: auto;
         margin-right: 1rem;
         gap: 0.5rem;
