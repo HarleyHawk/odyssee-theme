@@ -41,7 +41,7 @@ function odyssee_security_headers() {
     $is_localhost = isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false);
 
     // Content Security Policy base
-    $csp_policy = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://odysseexp.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';";
+    $csp_policy = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://odysseexp.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';";
     
     if ( ! $is_localhost ) {
         $csp_policy .= " upgrade-insecure-requests;";

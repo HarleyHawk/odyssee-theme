@@ -65,7 +65,7 @@ function get_actual_logo_uri($filename)
                         <i class="fas fa-globe"></i> Odyssee Experience
                     </a>
                     <a href="https://github.com/HarleyHawk?tab=repositories" class="cv-contact-item" target="_blank" rel="noopener noreferrer">
-                        <i class="fa fa-github"></i> GitHub
+                        <i class="fab fa-github"></i> GitHub
                     </a>
                 </div>
             </div>
