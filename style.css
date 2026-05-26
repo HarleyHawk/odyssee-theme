@@ -116,7 +116,7 @@ body.theme-dark.color-green {
 
 /* Tema escuro + Paleta amarela */
 body.theme-dark.color-yellow {
-    --bg-page: #352314;
+    --bg-page: #3B2B21;
     --color-accent: #ce9418;
     --color-title: #f9e15a;
 }
