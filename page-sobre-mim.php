@@ -57,12 +57,15 @@ function get_actual_logo_uri($filename)
                     <a href="tel:+5511963208691" class="cv-contact-item">
                         <i class="fab fa-whatsapp"></i> +55 (11) 96320-8691
                     </a>
-                    <a href="https://www.instagram.com/harley_l.m/" class="cv-contact-item" target="_blank"
+                    <a href="https://www.instagram.com/odysseexp/" class="cv-contact-item" target="_blank"
                         rel="noopener noreferrer">
-                        <i class="fab fa-instagram"></i> @Harley_LM
+                        <i class="fab fa-instagram"></i> @Odysseexp
                     </a>
                     <a href="https://odysseexp.com" class="cv-contact-item" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-globe"></i> https://odysseexp.com/
+                        <i class="fas fa-globe"></i> Odyssee Experience
+                    </a>
+                    <a href="https://github.com/HarleyHawk?tab=repositories" class="cv-contact-item" target="_blank" rel="noopener noreferrer">
+                        <i class="fa fa-github"></i> GitHub
                     </a>
                 </div>
             </div>
