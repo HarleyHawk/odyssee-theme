@@ -61,6 +61,9 @@ function get_actual_logo_uri($filename)
                         rel="noopener noreferrer">
                         <i class="fab fa-instagram"></i> @Odysseexp
                     </a>
+                    <a href="https://www.linkedin.com/in/harleypaiva/" class="cv-contact-item" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-brands fa-linkedin-in"></i> LinkedIn
+                    </a>
                     <a href="https://odysseexp.com" class="cv-contact-item" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-globe"></i> Odyssee Experience
                     </a>
@@ -79,22 +82,22 @@ function get_actual_logo_uri($filename)
             <div class="cv-timeline-item">
                 <div class="cv-year">2016 - Atual</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-mm-title">Designer Gráfico, Editor de Vídeo
+                    <h3 data-key="exp-odysseexp-title">Designer Gráfico, Editor de Vídeo
 e Ilustrador Digital | Autônomo</h3>
+                    <h4 data-key="exp-odysseexp-company-title">Odyssee Experience</h4>
                     <ul>
-                        <li data-key="exp-mm-1">Desenvolvimento e criação de banners para o blog.</li>
-                        <li data-key="exp-mm-2">Redator de matérias e revisor das demais matérias publicadas.</li>
-                        <li data-key="exp-mm-3">Auxiliar no desenvolvimento da UX/UI do blog.</li>
-                        <li data-key="exp-mm-4">Auxiliar na criação e desenvolvimento da identidade visual do site.</li>
+                        <li data-key="exp-odysseexp-1">Desenvolvimento e criação de banners para o blog.</li>
+                        <li data-key="exp-odysseexp-2">Redator de matérias e revisor das demais matérias publicadas.</li>
+                        <li data-key="exp-odysseexp-3">Auxiliar no desenvolvimento da UX/UI do blog.</li>
+                        <li data-key="exp-odysseexp-4">Auxiliar na criação e desenvolvimento da identidade visual do site.</li>
                     </ul>
                 </div>
             </div>
-
-        <div class="cv-timeline">
             <div class="cv-timeline-item">
                 <div class="cv-year">2016 - 2018</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-mm-title">Mobile Minecraft | Freelance</h3>
+                    <h3 data-key="exp-mm-title">Designer Gráfico e Redator | Freelance</h3>
+                    <h4 data-key="exp-mm-company-title">Mobile Minecraft (O site foi encerrado em 2018)</h4>
                     <ul>
                         <li data-key="exp-mm-1">Desenvolvimento e criação de banners para o blog.</li>
                         <li data-key="exp-mm-2">Redator de matérias e revisor das demais matérias publicadas.</li>
@@ -107,7 +110,8 @@ e Ilustrador Digital | Autônomo</h3>
             <div class="cv-timeline-item">
                 <div class="cv-year">2020 - 2022</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-fleury-title">Fleury S.A - Recepcionista | CLT</h3>
+                    <h3 data-key="exp-fleury-title">Recepcionista | CLT</h3>
+                    <h4 data-key="exp-fleury-company-title">Grupo Fleury</h4>
                     <ul>
                         <li data-key="exp-fleury-1">Atendimento e abertura de ficha de exames médicos.</li>
                         <li data-key="exp-fleury-2">Agendamento de procedimentos médicos laboratoriais.</li>
@@ -122,7 +126,8 @@ e Ilustrador Digital | Autônomo</h3>
             <div class="cv-timeline-item">
                 <div class="cv-year">2023 - 2023</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-anymous-title">ANYMOUS - Design Gráfico | Estágio</h3>
+                    <h3 data-key="exp-anymous-title">Designer Gráfico | Estágio</h3>
+                    <h4 data-key="exp-anymous-company-title">ANYMOUS (atualmente falida, seguindo apenas com a submarca BioSec Pet.)</h4>
                     <ul>
                         <li data-key="exp-anymous-1">Criação e elaboração de posts e carrosséis para Instagram.</li>
                         <li data-key="exp-anymous-2">Criação e elaboração de reels para Instagram.</li>
@@ -136,7 +141,8 @@ e Ilustrador Digital | Autônomo</h3>
             <div class="cv-timeline-item">
                 <div class="cv-year">2023 - 2023</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-divterm-title">Div Term Tecnomoldura - Supervisor de fábrica de corte de letras-caixa | Informal</h3>
+                    <h3 data-key="exp-divterm-title">Supervisor de fábrica de corte de letras-caixa | Informal</h3>
+                    <h4 data-key="exp-divterm-company-title">Div Term Tecnomoldura</h4>
                     <ul>
                         <li data-key="exp-divterm-1">Gerar arquivos escalonados e compatíveis para recorte em máquina
                             laser, fio quente e MDF.</li>
@@ -154,9 +160,25 @@ recorte e evitar gastos excessivos com matéria-prima.</li>
             <div class="cv-timeline-item">
                 <div class="cv-year">2024 - 2024</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-first-title">First Publicidade - Designer Gráfico Pleno | Temporário</h3>
+                    <h3 data-key="exp-atento-title">Especialista em atendimento | CLT</h3>
+                    <h4 data-key="exp-atento-company-title">Atento</h4>
                     <ul>
-                        <li data-key="exp-first-1">Criação e elaboração de posts e carroséis para Instagram de diversas
+                        <li data-key="exp-atento-1">Atendimento voz receptivo para clientes do plano do grupo de
+faculdades Cogna (grupo de faculdades da Anhanguera)</li>
+                        <li data-key="exp-atento-2">Atendimento receptivo via WhatsApp e e-mail, 5 telas.</li>
+                        <li data-key="exp-atento-3">Sanar dúvidas relativas a faturas, grades de aula, site, campus, contrato e
+regularizações de débitos.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cv-timeline-item">
+                <div class="cv-year">2024 - 2024</div>
+                <div class="cv-content">
+                    <h3 data-key="exp-first-title">Designer Gráfico Pleno | Temporário</h3>
+                    <h4 data-key="exp-first-company-title">First Publicidade</h4>
+                    <ul>
+                        <li data-key="exp-first-1">Criação e elaboração de posts e carrosséis para Instagram de diversas
                             identidades visuais.</li>
                         <li data-key="exp-first-2">Criação de posts para as campanhas políticas de candidatos vereadores
                             e prefeitos do estado de São Paulo.</li>
@@ -167,9 +189,23 @@ recorte e evitar gastos excessivos com matéria-prima.</li>
             </div>
 
             <div class="cv-timeline-item">
+                <div class="cv-year">2025 - 2025</div>
+                <div class="cv-content">
+                    <h3 data-key="exp-neobpo-title">Especialista em atendimento | CLT</h3>
+                    <h4 data-key="exp-neobpo-company-title">NeoBPO (atualmente NeoHype)</h4>
+                    <ul>
+                        <li data-key="exp-neobpo-1">Atendimento receptivo para clientes do plano de saúde Amil.</li>
+                        <li data-key="exp-neobpo-2">Agendamento de exames médicos e consultas.</li>
+                        <li data-key="exp-neobpo-3">Sanar dúvidas relativas a unidades, agendas, procedimentos médicos.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cv-timeline-item">
                 <div class="cv-year">2025 - 2026</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-percons-title">Percons - Designer Gráfico Jr. | PJ</h3>
+                    <h3 data-key="exp-percons-title">Designer Gráfico Jr. | PJ</h3>
+                    <h4 data-key="exp-percons-company-title">Percons - Pernamcubo Conservadora</h4>
                     <ul>
                         <li data-key="exp-percons-1">Criação de artes para posts em redes sociais.</li>
                         <li data-key="exp-percons-2">Redigir documentos internos com a identidade visual da empresa.
@@ -184,7 +220,8 @@ recorte e evitar gastos excessivos com matéria-prima.</li>
             <div class="cv-timeline-item">
                 <div class="cv-year">2026 - Atual</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-blackco-title">Black&CO - Designer Gráfico Pleno | Voluntário</h3>
+                    <h3 data-key="exp-blackco-title">Designer Gráfico Pleno | Voluntário</h3>
+                    <h4 data-key="exp-blackco-company-title">Black&CO</h4>
                     <ul>
                         <li data-key="exp-blackco-1">Elaboração de copy-writhing da arte.</li>
                         <li data-key="exp-blackco-2">Elaboração de tema.</li>
@@ -236,8 +273,8 @@ recorte e evitar gastos excessivos com matéria-prima.</li>
                 <h3 data-key="lang-speaking-title">Idiomas - Comunicação Verbal</h3>
                 <ul>
                     <li data-key="lang-pt-native-speaking">Português Brasileiro - Nativo</li>
-                    <li data-key="lang-en-intermediate">Inglês - Intermediário</li>
-                    <li data-key="lang-de-basic-speaking">Alemão - Básico</li>
+                    <li data-key="lang-en-intermediate">Inglês - Básico</li>
+                    <li data-key="lang-de-basic-speaking">Alemão - N/A</li>
                 </ul>
             </div>
         </div>
@@ -378,10 +415,6 @@ recorte e evitar gastos excessivos com matéria-prima.</li>
             <h4 data-key="software-programming-title">Programação e suas linguagens</h4>
             <div class="cv-software-grid" id="programming-software-grid">
                 <div class="cv-software-item">
-                    <img src="<?php echo get_actual_logo_uri('visual_studio_code.svg'); ?>" alt="VS Code">
-                    <span>Básico</span>
-                </div>
-                <div class="cv-software-item">
                     <img src="<?php echo get_actual_logo_uri('html5_logo_and_wordmark.svg'); ?>" alt="HTML5">
                     <span>Básico</span>
                 </div>
@@ -426,6 +459,19 @@ recorte e evitar gastos excessivos com matéria-prima.</li>
             </div>
         </div>
     </section>
+
+    <!-- O que almejo -->
+    <section class="cv-section cv-expectativa-section">
+        <h2 class="cv-section-title" data-key="cv-expectativa-title">O que almejo</h2>
+        <div class="cv-expectativa">
+            <p data-key="cv-expectativa-1">Atualmente, estou em busca de estabilidade financeira em uma empresa que valorize minhas habilidades e me ofereça a oportunidade de desenvolver novas competências ou aprimorar as já adquiridas. Com 24 anos, meu objetivo é alcançar a independência, conquistar minha própria moradia e assumir as responsabilidades inerentes à vida adulta.</p>
+            <br>
+            <p data-key="cv-expectativa-2">Procuro um emprego que não apenas proporcione uma remuneração adequada, mas que também ofereça oportunidades de crescimento e reconhecimento. Desejo que meu trabalho seja valorizado; meu intuito é tornar-me uma referência em excelência, criatividade e carisma.</p>
+            <br>
+            <p data-key="cv-expectativa-3">Não estou interessado em cargos que exijam liderança ativa ou que me responsabilizem por outros colaboradores. Minha preferência é por atuar em equipe ou de maneira independente, onde possa desempenhar minhas funções com eficácia.</p>
+        </div>
+    </section>
+        
 
     <!-- Citação final -->
     <div class="cv-quote">

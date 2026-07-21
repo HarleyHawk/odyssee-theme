@@ -84,6 +84,150 @@ function odyssee_cv_admin_page() {
 
     // Carregar dados atuais
     $cv_data = odyssee_cv_get_data();
+    
+    // Sincronizar dados do PHP para o Banco (Rodar uma vez)
+    if ( empty( get_option('cv_data_synced_v2') ) ) {
+        $t_url = get_template_directory_uri() . '/assets/images/logos/';
+        
+        $cv_data['experiencias'] = array(
+            array(
+                'titulo' => 'Designer Gráfico, Editor de Vídeo e Ilustrador Digital | Autônomo',
+                'empresa' => 'Odyssee Experience',
+                'periodo' => '2016 - Atual',
+                'descricao_pt' => "Desenvolvimento e criação de banners para o blog.\nRedator de matérias e revisor das demais matérias publicadas.\nAuxiliar no desenvolvimento da UX/UI do blog.\nAuxiliar na criação e desenvolvimento da identidade visual do site.",
+                'descricao_en' => "Development and creation of banners for the blog.\nWriter and reviewer of articles published on the blog.\nAssist in the UX/UI development of the blog.\nAssist in the creation and development of the site's visual identity."
+            ),
+            array(
+                'titulo' => 'Designer Gráfico e Redator | Freelance',
+                'empresa' => 'Mobile Minecraft (O site foi encerrado em 2018)',
+                'periodo' => '2016 - 2018',
+                'descricao_pt' => "Desenvolvimento e criação de banners para o blog.\nRedator de matérias e revisor das demais matérias publicadas.\nAuxiliar no desenvolvimento da UX/UI do blog.\nAuxiliar na criação e desenvolvimento da identidade visual do site.",
+                'descricao_en' => "Development and creation of banners for the blog.\nWriter and reviewer of articles published on the blog.\nAssist in the UX/UI development of the blog.\nAssist in the creation and development of the site's visual identity."
+            ),
+            array(
+                'titulo' => 'Recepcionista | CLT',
+                'empresa' => 'Grupo Fleury',
+                'periodo' => '2020 - 2022',
+                'descricao_pt' => "Atendimento e abertura de ficha de exames médicos.\nAgendamento de procedimentos médicos laboratoriais.\nTratativa comercial com convênios credenciados em planilhas.\nTreinador de novos trabalhadores para a recepção e abertura de ficha.\nArmazenador de arquivos da unidade de atendimento.\nGestão backoffice e resolução de problemas financeiros em planilhas.",
+                'descricao_en' => "Customer service and opening of medical exam records.\nScheduling of laboratory medical procedures.\nCommercial negotiations with accredited health plans in spreadsheets.\nTrainer of new workers for reception and record opening.\nStorage of service unit files.\nBackoffice management and resolution of financial problems in spreadsheets."
+            ),
+            array(
+                'titulo' => 'Designer Gráfico | Estágio',
+                'empresa' => 'ANYMOUS (atualmente falida, seguindo apenas com a submarca BioSec Pet.)',
+                'periodo' => '2023 - 2023',
+                'descricao_pt' => "Criação e elaboração de posts e carrosséis para Instagram.\nCriação e elaboração de reels para Instagram.\nRedator e tratamento de fotos de produtos para marketplace.\nUX/UI do site. Gestão de ícones, símbolos e acessibilidade da página.",
+                'descricao_en' => "Creation and development of posts and carousels for Instagram.\nCreation and development of reels for Instagram.\nWriter and product photo editor for marketplace.\nWebsite UX/UI. Management of icons, symbols and page accessibility."
+            ),
+            array(
+                'titulo' => 'Supervisor de fábrica de corte de letras-caixa | Informal',
+                'empresa' => 'Div Term Tecnomoldura',
+                'periodo' => '2023 - 2023',
+                'descricao_pt' => "Gerar arquivos escalonados e compatíveis para recorte em máquina laser, fio quente e MDF.\nElaborar aproveitamento de material em software para recorte em máquinas.\nOperação de corte laser e de corte a fio quente.\nElaborar tipografias e adapta-las para corte em máquinas de acordo com suas limitações.\nSupervisionar operadores de máquinas para garantir qualidade do recorte e evitar gastos excessivos com matéria-prima.",
+                'descricao_en' => "Generate scaled and compatible files for laser cutting, hot-wire cutting and MDF.\nDevelop material optimization in software for machine cutting.\nLaser cutting and hot wire cutting operation.\nDevelop typography and adapt it for cutting in machinery according to its limitations.\nSupervise machine operators to ensure cutting quality and avoid excessive raw material expenses."
+            ),
+            array(
+                'titulo' => 'Especialista em atendimento | CLT',
+                'empresa' => 'Atento',
+                'periodo' => '2024 - 2024',
+                'descricao_pt' => "Atendimento voz receptivo para clientes do plano do grupo de faculdades Cogna (grupo de faculdades da Anhanguera)\nAtendimento receptivo via WhatsApp e e-mail, 5 telas.\nSanar dúvidas relativas a faturas, grades de aula, site, campus, contrato e regularizações de débitos.",
+                'descricao_en' => "Inbound voice service for customers of the Cogna college group plan (Anhanguera college group)\nInbound service via WhatsApp and e-mail, 5 screens.\nResolve doubts regarding invoices, class schedules, website, campus, contract and debt regularizations."
+            ),
+            array(
+                'titulo' => 'Designer Gráfico Pleno | Temporário',
+                'empresa' => 'First Publicidade',
+                'periodo' => '2024 - 2024',
+                'descricao_pt' => "Criação e elaboração de posts e carrosséis para Instagram de diversas identidades visuais.\nCriação de posts para as campanhas políticas de candidatos vereadores e prefeitos do estado de São Paulo.\nBranding de posts trends e interativos para redes sociais.\nMaterial offline para campanhas políticas (banners, flyers, adesivos, etc.).",
+                'descricao_en' => "Creation and development of posts and carousels for Instagram with various visual identities.\nCreation of posts for political campaigns of city council and mayor candidates in São Paulo state.\nBranding of trendy and interactive posts for social media.\nOffline material for political campaigns (banners, flyers, stickers, etc.)."
+            ),
+            array(
+                'titulo' => 'Especialista em atendimento | CLT',
+                'empresa' => 'NeoBPO (atualmente NeoHype)',
+                'periodo' => '2025 - 2025',
+                'descricao_pt' => "Atendimento receptivo para clientes do plano de saúde Amil.\nAgendamento de exames médicos e consultas.\nSanar dúvidas relativas a unidades, agendas, procedimentos médicos.",
+                'descricao_en' => "Inbound customer service for Amil health plan clients.\nScheduling of medical exams and appointments.\nResolve doubts regarding units, schedules, medical procedures."
+            ),
+            array(
+                'titulo' => 'Designer Gráfico Jr. | PJ',
+                'empresa' => 'Percons - Pernamcubo Conservadora',
+                'periodo' => '2025 - 2026',
+                'descricao_pt' => "Criação de artes para posts em redes sociais.\nRedigir documentos internos com a identidade visual da empresa.\nCriar e fechar arquivos para impressos (material offiline).\nElaborar e criar identidades visuais e logos para marcas.\nDesign de apresentações empresariais.",
+                'descricao_en' => "Creating artwork for social media posts.\nWrite internal documents with the company's visual identity.\nCreate and prepare print-ready files (offline material).\nDesign and create visual identities and logos for brands.\nCorporate presentation design."
+            ),
+            array(
+                'titulo' => 'Designer Gráfico Pleno | Voluntário',
+                'empresa' => 'Black&CO',
+                'periodo' => '2026 - Atual',
+                'descricao_pt' => "Elaboração de copy-writhing da arte.\nElaboração de tema.\nCriação de artes para carrosséis no Instagram.",
+                'descricao_en' => "Copywriting for artwork.\nTheme development.\nCreation of artwork for Instagram carousels."
+            )
+        );
+        
+        $cv_data['cursos'] = array(
+            array(
+                'nome' => 'Curso de informática e inglês',
+                'instituicao' => 'Curso - Caution Pontocom',
+                'data_final' => '2015 - 2017',
+                'descricao_pt' => "194h/aula",
+                'descricao_en' => "194h/class"
+            ),
+            array(
+                'nome' => 'CST em Design Gráfico',
+                'instituicao' => 'Faculdade - UNICID',
+                'data_final' => '2022 - 2024',
+                'descricao_pt' => "4 semestres",
+                'descricao_en' => "4 semesters"
+            )
+        );
+        
+        $cv_data['habilidades'] = array(
+            'criativos' => array(
+                array('nome' => 'Photoshop', 'nivel' => 'avançado', 'icon_url' => $t_url . 'adobe_photoshop_cc_icon.svg'),
+                array('nome' => 'Illustrator', 'nivel' => 'avançado', 'icon_url' => $t_url . 'adobe_illustrator_cc_icon.svg'),
+                array('nome' => 'InDesign', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'adobe_indesign_cc_2026_icon.svg'),
+                array('nome' => 'Lightroom', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'adobe_photoshop_lightroom_cc_logo.svg'),
+                array('nome' => 'Premiere', 'nivel' => 'avançado', 'icon_url' => $t_url . 'adobe_premiere_pro_cc_2026_icon.svg'),
+                array('nome' => 'After Effects', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'adobe_after_effects_cc_2026_icon.svg'),
+                array('nome' => 'Blender', 'nivel' => 'iniciante', 'icon_url' => $t_url . 'blender_logo.svg'),
+                array('nome' => 'Affinity', 'nivel' => 'avançado', 'icon_url' => $t_url . 'affinity_(app)_logo.svg'),
+                array('nome' => 'GIMP', 'nivel' => 'avançado', 'icon_url' => $t_url . 'gimp.svg'),
+                array('nome' => 'DaVinci Resolve', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'davinci_resolve.png'),
+                array('nome' => 'Inkscape', 'nivel' => 'avançado', 'icon_url' => $t_url . 'inkscape.svg'),
+                array('nome' => 'Krita', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'krita.svg'),
+                array('nome' => 'Clip Studio Paint', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'csp.png'),
+                array('nome' => 'Darktable', 'nivel' => 'iniciante', 'icon_url' => $t_url . 'darktable.svg'),
+                array('nome' => 'CapCut', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'capcut.svg'),
+                array('nome' => 'Photopea', 'nivel' => 'avançado', 'icon_url' => $t_url . 'photopea.svg'),
+                array('nome' => 'Clipchamp', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'clipchamp.svg'),
+            ),
+            'office' => array(
+                array('nome' => 'Word', 'nivel' => 'avançado', 'icon_url' => $t_url . 'microsoft_office_word_(2025–present).svg'),
+                array('nome' => 'Excel', 'nivel' => 'iniciante', 'icon_url' => $t_url . 'microsoft_office_excel_(2025–present).svg'),
+                array('nome' => 'PowerPoint', 'nivel' => 'avançado', 'icon_url' => $t_url . 'microsoft_office_powerpoint_(2025–present).svg'),
+                array('nome' => 'LibreOffice Writer', 'nivel' => 'iniciante', 'icon_url' => $t_url . 'libreoffice_7.5_writer_icon.svg'),
+                array('nome' => 'LibreOffice Impress', 'nivel' => 'avançado', 'icon_url' => $t_url . 'libreoffice_7.5_impress_icon.svg'),
+                array('nome' => 'LibreOffice Calc', 'nivel' => 'iniciante', 'icon_url' => $t_url . 'libreoffice_7.5_calc_icon.svg'),
+                array('nome' => 'LibreOffice Draw', 'nivel' => 'intermediário', 'icon_url' => $t_url . 'libreoffice_7.5_draw_icon.svg'),
+            ),
+            'programacao' => array(
+                array('nome' => 'HTML5', 'nivel' => 'iniciante', 'icon_url' => $t_url . 'html5_logo_and_wordmark.svg'),
+                array('nome' => 'CSS3', 'nivel' => 'iniciante', 'icon_url' => $t_url . 'css3_logo_and_wordmark.svg'),
+                array('nome' => 'JavaScript', 'nivel' => 'iniciante', 'icon_url' => $t_url . 'javascript-shield.svg'),
+            ),
+            'os' => array(
+                array('nome' => 'Windows', 'nivel' => '', 'icon_url' => $t_url . 'windows_11.svg'),
+                array('nome' => 'Fedora', 'nivel' => '', 'icon_url' => $t_url . 'fedora-logo.svg'),
+                array('nome' => 'Arch', 'nivel' => '', 'icon_url' => $t_url . 'arch_linux-logo.svg'),
+                array('nome' => 'Linux Mint', 'nivel' => '', 'icon_url' => $t_url . 'linux_mint.svg'),
+                array('nome' => 'Steam OS', 'nivel' => '', 'icon_url' => $t_url . 'steam_os.svg'),
+                array('nome' => 'Bazzite', 'nivel' => '', 'icon_url' => $t_url . 'bazzite.svg'),
+                array('nome' => 'Zorin', 'nivel' => '', 'icon_url' => $t_url . 'zorin_os.svg'),
+                array('nome' => 'Pop! OS', 'nivel' => '', 'icon_url' => $t_url . 'pop_os.svg'),
+            )
+        );
+        
+        update_option('odyssee_cv_data', $cv_data);
+        update_option('cv_data_synced_v2', true);
+    }
     ?>
 
     <div class="wrap odyssee-cv-admin-wrap">

@@ -81,7 +81,8 @@
                 item.innerHTML = `
                     <div class="cv-year">${escapeHtml(exp.periodo || '')}</div>
                     <div class="cv-content">
-                        <h3>${escapeHtml(exp.titulo || '')} - ${escapeHtml(exp.empresa || '')}</h3>
+                        <h3>${escapeHtml(exp.titulo || '')}</h3>
+                        <h4>${escapeHtml(exp.empresa || '')}</h4>
                         ${descHTML}
                     </div>
                 `;
@@ -186,12 +187,7 @@
                     
                     let iconHTML = '';
                     if (skill.icon_url) {
-                        const isSVG = skill.icon_url.toLowerCase().endsWith('.svg');
-                        if (isSVG) {
-                            iconHTML = `<object data="${escapeHtml(skill.icon_url)}" type="image/svg+xml" class="cv-software-icon"></object>`;
-                        } else {
-                            iconHTML = `<img src="${escapeHtml(skill.icon_url)}" alt="${escapeHtml(skill.nome || '')}" class="cv-software-icon" />`;
-                        }
+                        iconHTML = `<img src="${escapeHtml(skill.icon_url)}" alt="${escapeHtml(skill.nome || '')}" class="cv-software-icon" />`;
                     }
 
                     // Para OS, não mostra o nível; para outros softwares, mostra
