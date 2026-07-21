@@ -49,7 +49,7 @@ function odyssee_cv_enqueue_admin_assets( $hook_suffix ) {
     wp_enqueue_script(
         'odyssee-cv-admin',
         get_template_directory_uri() . '/inc/cv-admin.js',
-        array( 'jquery' ),
+        array( 'jquery', 'jquery-ui-sortable' ),
         '1.0.0',
         true
     );
@@ -86,9 +86,16 @@ function odyssee_cv_admin_page() {
     $cv_data = odyssee_cv_get_data();
     
     // Sincronizar dados do PHP para o Banco (Rodar uma vez)
-    if ( empty( get_option('cv_data_synced_v2') ) ) {
+    if ( empty( get_option('cv_data_synced_v3') ) ) {
         $t_url = get_template_directory_uri() . '/assets/images/logos/';
         
+        $cv_data['descricao']['pt_br']['expectativa'] = "Atualmente, estou em busca de estabilidade financeira em uma empresa que valorize minhas habilidades e me ofereça a oportunidade de desenvolver novas competências ou aprimorar as já adquiridas. Com 24 anos, meu objetivo é alcançar a independência, conquistar minha própria moradia e assumir as responsabilidades inerentes à vida adulta.\n\nProcuro um emprego que não apenas proporcione uma remuneração adequada, mas que também ofereça oportunidades de crescimento e reconhecimento. Desejo que meu trabalho seja valorizado; meu intuito é tornar-me uma referência em excelência, criatividade e carisma.\n\nNão estou interessado em cargos que exijam liderança ativa ou que me responsabilizem por outros colaboradores. Minha preferência é por atuar em equipe ou de maneira independente, onde possa desempenhar minhas funções com eficácia.";
+        $cv_data['descricao']['en_us']['expectativa'] = "Currently, I am looking for financial stability in a company that values my skills and offers me the opportunity to develop new competencies or improve those already acquired. At 24, my goal is to achieve independence, acquire my own home, and assume the responsibilities inherent to adult life.\n\nI am looking for a job that not only provides adequate remuneration but also offers opportunities for growth and recognition. I want my work to be valued; my intention is to become a reference in excellence, creativity, and charisma.\n\nI am not interested in positions that require active leadership or make me responsible for other employees. My preference is to work in a team or independently, where I can perform my duties effectively.";
+        $cv_data['descricao']['pt_br']['citacao'] = "Intelligence is the ability to avoid doing work, yet getting the work done.";
+        $cv_data['descricao']['en_us']['citacao'] = "Intelligence is the ability to avoid doing work, yet getting the work done.";
+        $cv_data['descricao']['pt_br']['citacao_autor'] = "Linus Torvalds";
+        $cv_data['descricao']['en_us']['citacao_autor'] = "Linus Torvalds";
+
         $cv_data['experiencias'] = array(
             array(
                 'titulo' => 'Designer Gráfico, Editor de Vídeo e Ilustrador Digital | Autônomo',
@@ -226,7 +233,7 @@ function odyssee_cv_admin_page() {
         );
         
         update_option('odyssee_cv_data', $cv_data);
-        update_option('cv_data_synced_v2', true);
+        update_option('cv_data_synced_v3', true);
     }
     ?>
 
@@ -280,6 +287,37 @@ function odyssee_cv_admin_page() {
                         ><?php echo esc_textarea( $cv_data['descricao']['pt_br']['intro_2'] ?? '' ); ?></textarea>
                         <p class="description">Segunda parte da introdução em português.</p>
                     </div>
+                    <div class="form-group">
+                        <label for="desc_pt_expectativa">O Que Almejo (Expectativa - PT-BR)</label>
+                        <textarea 
+                            id="desc_pt_expectativa" 
+                            name="descricao[pt_br][expectativa]" 
+                            class="large-text" 
+                            rows="5"
+                        ><?php echo esc_textarea( $cv_data['descricao']['pt_br']['expectativa'] ?? '' ); ?></textarea>
+                        <p class="description">Texto para a seção "O que almejo". Quebras de linha (Enter) criarão novos parágrafos.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="desc_pt_citacao">Citação Final (PT-BR)</label>
+                        <textarea 
+                            id="desc_pt_citacao" 
+                            name="descricao[pt_br][citacao]" 
+                            class="large-text" 
+                            rows="2"
+                        ><?php echo esc_textarea( $cv_data['descricao']['pt_br']['citacao'] ?? '' ); ?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="desc_pt_citacao_autor">Autor da Citação (PT-BR)</label>
+                        <input 
+                            type="text"
+                            id="desc_pt_citacao_autor" 
+                            name="descricao[pt_br][citacao_autor]" 
+                            class="regular-text" 
+                            value="<?php echo esc_attr( $cv_data['descricao']['pt_br']['citacao_autor'] ?? '' ); ?>"
+                        />
+                    </div>
                 </div>
 
                 <div class="cv-admin-section">
@@ -305,6 +343,37 @@ function odyssee_cv_admin_page() {
                             rows="4"
                         ><?php echo esc_textarea( $cv_data['descricao']['en_us']['intro_2'] ?? '' ); ?></textarea>
                         <p class="description">Second part of introduction in English.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="desc_en_expectativa">O Que Almejo (Expectation - EN-US)</label>
+                        <textarea 
+                            id="desc_en_expectativa" 
+                            name="descricao[en_us][expectativa]" 
+                            class="large-text" 
+                            rows="5"
+                        ><?php echo esc_textarea( $cv_data['descricao']['en_us']['expectativa'] ?? '' ); ?></textarea>
+                        <p class="description">Text for the "What I aim for" section. Line breaks (Enter) will create new paragraphs.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="desc_en_citacao">Final Quote (EN-US)</label>
+                        <textarea 
+                            id="desc_en_citacao" 
+                            name="descricao[en_us][citacao]" 
+                            class="large-text" 
+                            rows="2"
+                        ><?php echo esc_textarea( $cv_data['descricao']['en_us']['citacao'] ?? '' ); ?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="desc_en_citacao_autor">Quote Author (EN-US)</label>
+                        <input 
+                            type="text"
+                            id="desc_en_citacao_autor" 
+                            name="descricao[en_us][citacao_autor]" 
+                            class="regular-text" 
+                            value="<?php echo esc_attr( $cv_data['descricao']['en_us']['citacao_autor'] ?? '' ); ?>"
+                        />
                     </div>
                 </div>
             </div>
@@ -830,10 +899,16 @@ function odyssee_cv_get_data() {
             'pt_br' => array(
                 'intro_1' => '',
                 'intro_2' => '',
+                'expectativa' => '',
+                'citacao' => '',
+                'citacao_autor' => '',
             ),
             'en_us' => array(
                 'intro_1' => '',
                 'intro_2' => '',
+                'expectativa' => '',
+                'citacao' => '',
+                'citacao_autor' => '',
             ),
         ),
         'experiencias' => array(),
@@ -862,10 +937,16 @@ function odyssee_cv_save_data() {
             'pt_br' => array(
                 'intro_1' => isset( $_POST['descricao']['pt_br']['intro_1'] ) ? sanitize_textarea_field( $_POST['descricao']['pt_br']['intro_1'] ) : '',
                 'intro_2' => isset( $_POST['descricao']['pt_br']['intro_2'] ) ? sanitize_textarea_field( $_POST['descricao']['pt_br']['intro_2'] ) : '',
+                'expectativa' => isset( $_POST['descricao']['pt_br']['expectativa'] ) ? sanitize_textarea_field( $_POST['descricao']['pt_br']['expectativa'] ) : '',
+                'citacao' => isset( $_POST['descricao']['pt_br']['citacao'] ) ? sanitize_textarea_field( $_POST['descricao']['pt_br']['citacao'] ) : '',
+                'citacao_autor' => isset( $_POST['descricao']['pt_br']['citacao_autor'] ) ? sanitize_text_field( $_POST['descricao']['pt_br']['citacao_autor'] ) : '',
             ),
             'en_us' => array(
                 'intro_1' => isset( $_POST['descricao']['en_us']['intro_1'] ) ? sanitize_textarea_field( $_POST['descricao']['en_us']['intro_1'] ) : '',
                 'intro_2' => isset( $_POST['descricao']['en_us']['intro_2'] ) ? sanitize_textarea_field( $_POST['descricao']['en_us']['intro_2'] ) : '',
+                'expectativa' => isset( $_POST['descricao']['en_us']['expectativa'] ) ? sanitize_textarea_field( $_POST['descricao']['en_us']['expectativa'] ) : '',
+                'citacao' => isset( $_POST['descricao']['en_us']['citacao'] ) ? sanitize_textarea_field( $_POST['descricao']['en_us']['citacao'] ) : '',
+                'citacao_autor' => isset( $_POST['descricao']['en_us']['citacao_autor'] ) ? sanitize_text_field( $_POST['descricao']['en_us']['citacao_autor'] ) : '',
             ),
         ),
         'experiencias' => odyssee_cv_sanitize_repeater( $_POST['experiencias'] ?? array() ),

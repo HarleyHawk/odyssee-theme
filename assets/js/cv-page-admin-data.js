@@ -40,6 +40,29 @@
         if (intro2 && descricao.intro_2) {
             intro2.textContent = descricao.intro_2;
         }
+
+        const expectativaContainer = document.querySelector('.cv-expectativa');
+        if (expectativaContainer && descricao.expectativa) {
+            const paragrafos = descricao.expectativa.split('\n').filter(p => p.trim() !== '');
+            let expHtml = '';
+            paragrafos.forEach((p, idx) => {
+                expHtml += `<p>${escapeHtml(p.trim())}</p>`;
+                if (idx < paragrafos.length - 1) {
+                    expHtml += '<br>';
+                }
+            });
+            expectativaContainer.innerHTML = expHtml;
+        }
+
+        const citacao = document.querySelector('[data-key="cv-quote"]');
+        if (citacao && descricao.citacao) {
+            citacao.textContent = '"' + descricao.citacao + '"';
+        }
+
+        const citacaoAutor = document.querySelector('[data-key="cv-quote-author"]');
+        if (citacaoAutor && descricao.citacao_autor) {
+            citacaoAutor.textContent = '~' + descricao.citacao_autor;
+        }
     }
 
     // =====================================================

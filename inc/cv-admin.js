@@ -183,7 +183,25 @@
     }
 
     // =====================================================
-    // 3. INICIALIZAÇÃO
+    // 3. SORTABLE (DRAG AND DROP)
+    // =====================================================
+
+    function initSortable() {
+        if (typeof jQuery !== 'undefined' && jQuery.fn.sortable) {
+            jQuery('.repeater-container').sortable({
+                handle: '.repeater-header',
+                items: '> .repeater-item',
+                update: function() {
+                    updateRepeaterIndices();
+                }
+            });
+            // Adicionar cursor de arrastar no header
+            jQuery('.repeater-header').css('cursor', 'move');
+        }
+    }
+
+    // =====================================================
+    // 4. INICIALIZAÇÃO
     // =====================================================
 
     function init() {
@@ -195,6 +213,7 @@
         initAddButtons();
         updateRepeaterIndices();
         initHabilidadeNomeInput();
+        initSortable();
 
         // Expandir primeiro item
         const firstItem = document.querySelector('.repeater-item');

@@ -460,7 +460,7 @@ regularizações de débitos.</li>
         </div>
     </section>
 
-    <!-- O que almejo -->
+    <!-- expectativa -->
     <section class="cv-section cv-expectativa-section">
         <h2 class="cv-section-title" data-key="cv-expectativa-title">O que almejo</h2>
         <div class="cv-expectativa">
