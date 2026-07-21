@@ -77,11 +77,26 @@ function get_actual_logo_uri($filename)
         <h2 class="cv-section-title" data-key="cv-experience-title">Experiência profissional</h2>
         <div class="cv-timeline">
             <div class="cv-timeline-item">
+                <div class="cv-year">2016 - Atual</div>
+                <div class="cv-content">
+                    <h3 data-key="exp-mm-title">Designer Gráfico, Editor de Vídeo
+e Ilustrador Digital | Autônomo</h3>
+                    <ul>
+                        <li data-key="exp-mm-1">Desenvolvimento e criação de banners para o blog.</li>
+                        <li data-key="exp-mm-2">Redator de matérias e revisor das demais matérias publicadas.</li>
+                        <li data-key="exp-mm-3">Auxiliar no desenvolvimento da UX/UI do blog.</li>
+                        <li data-key="exp-mm-4">Auxiliar na criação e desenvolvimento da identidade visual do site.</li>
+                    </ul>
+                </div>
+            </div>
+
+        <div class="cv-timeline">
+            <div class="cv-timeline-item">
                 <div class="cv-year">2016 - 2018</div>
                 <div class="cv-content">
-                    <h3>Mobile Minecraft</h3>
+                    <h3 data-key="exp-mm-title">Mobile Minecraft | Freelance</h3>
                     <ul>
-                        <li data-key="exp-mm-1">Desenvolvimento e criação de banners para o Blog.</li>
+                        <li data-key="exp-mm-1">Desenvolvimento e criação de banners para o blog.</li>
                         <li data-key="exp-mm-2">Redator de matérias e revisor das demais matérias publicadas.</li>
                         <li data-key="exp-mm-3">Auxiliar no desenvolvimento da UX/UI do blog.</li>
                         <li data-key="exp-mm-4">Auxiliar na criação e desenvolvimento da identidade visual do site.</li>
@@ -92,13 +107,14 @@ function get_actual_logo_uri($filename)
             <div class="cv-timeline-item">
                 <div class="cv-year">2020 - 2022</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-fleury-title">Fleury S.A - Recepcionista</h3>
+                    <h3 data-key="exp-fleury-title">Fleury S.A - Recepcionista | CLT</h3>
                     <ul>
                         <li data-key="exp-fleury-1">Atendimento e abertura de ficha de exames médicos.</li>
-                        <li data-key="exp-fleury-2">Atendimento à empresas e convênios credenciados.</li>
-                        <li data-key="exp-fleury-3">Treinador de novos trabalhadores para a recepção e abertura de
-                            ficha.</li>
-                        <li data-key="exp-fleury-4">Armazenador de arquivos da unidade de atendimento.</li>
+                        <li data-key="exp-fleury-2">Agendamento de procedimentos médicos laboratoriais.</li>
+                        <li data-key="exp-fleury-3">Tratativa comercial com convênios credenciados em planilhas.</li>
+                        <li data-key="exp-fleury-4">Treinador de novos trabalhadores para a recepção e abertura de ficha.</li>
+                        <li data-key="exp-fleury-5">Armazenador de arquivos da unidade de atendimento.</li>
+                        <li data-key="exp-fleury-6">Gestão backoffice e resolução de problemas financeiros em planilhas.</li>
                     </ul>
                 </div>
             </div>
@@ -106,11 +122,11 @@ function get_actual_logo_uri($filename)
             <div class="cv-timeline-item">
                 <div class="cv-year">2023 - 2023</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-anymous-title">ANYMOUS - Estagiário em Design Gráfico</h3>
+                    <h3 data-key="exp-anymous-title">ANYMOUS - Design Gráfico | Estágio</h3>
                     <ul>
-                        <li data-key="exp-anymous-1">Criação e elaboração de posts e carroséis para instagram.</li>
-                        <li data-key="exp-anymous-2">Criação e elaboração de reels para instagram.</li>
-                        <li data-key="exp-anymous-3">Redator e tratar fotos de produtos para marketplace.</li>
+                        <li data-key="exp-anymous-1">Criação e elaboração de posts e carrosséis para Instagram.</li>
+                        <li data-key="exp-anymous-2">Criação e elaboração de reels para Instagram.</li>
+                        <li data-key="exp-anymous-3">Redator e tratamento de fotos de produtos para marketplace.</li>
                         <li data-key="exp-anymous-4">UX/UI do site. Gestão de ícones, símbolos e acessibilidade da
                             página.</li>
                     </ul>
@@ -120,7 +136,7 @@ function get_actual_logo_uri($filename)
             <div class="cv-timeline-item">
                 <div class="cv-year">2023 - 2023</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-divterm-title">Div Term Tecnomoldura - Corte de letras-caixa</h3>
+                    <h3 data-key="exp-divterm-title">Div Term Tecnomoldura - Supervisor de fábrica de corte de letras-caixa | Informal</h3>
                     <ul>
                         <li data-key="exp-divterm-1">Gerar arquivos escalonados e compatíveis para recorte em máquina
                             laser, fio quente e MDF.</li>
@@ -129,6 +145,8 @@ function get_actual_logo_uri($filename)
                         <li data-key="exp-divterm-3">Operação de corte laser e de corte a fio quente.</li>
                         <li data-key="exp-divterm-4">Elaborar tipografias e adapta-las para corte em máquinas de acordo
                             com suas limitações.</li>
+                        <li data-key="exp-divterm-5">Supervisionar operadores de máquinas para garantir qualidade do
+recorte e evitar gastos excessivos com matéria-prima.</li>
                     </ul>
                 </div>
             </div>
@@ -136,13 +154,14 @@ function get_actual_logo_uri($filename)
             <div class="cv-timeline-item">
                 <div class="cv-year">2024 - 2024</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-first-title">First Publicidade - Designer Gráfico</h3>
+                    <h3 data-key="exp-first-title">First Publicidade - Designer Gráfico Pleno | Temporário</h3>
                     <ul>
-                        <li data-key="exp-first-1">Criação e elaboração de posts e carroséis para instagram de diversas
+                        <li data-key="exp-first-1">Criação e elaboração de posts e carroséis para Instagram de diversas
                             identidades visuais.</li>
                         <li data-key="exp-first-2">Criação de posts para as campanhas políticas de candidatos vereadores
                             e prefeitos do estado de São Paulo.</li>
-                        <li data-key="exp-first-3">Branding de posts trens e interativos para redes sociais.</li>
+                        <li data-key="exp-first-3">Branding de posts trends e interativos para redes sociais.</li>
+                        <li data-key="exp-first-4">Material offline para campanhas políticas (banners, flyers, adesivos, etc.).</li>
                     </ul>
                 </div>
             </div>
@@ -150,14 +169,26 @@ function get_actual_logo_uri($filename)
             <div class="cv-timeline-item">
                 <div class="cv-year">2025 - 2026</div>
                 <div class="cv-content">
-                    <h3 data-key="exp-percons-title">Percons - Designer Gráfico Jr.</h3>
+                    <h3 data-key="exp-percons-title">Percons - Designer Gráfico Jr. | PJ</h3>
                     <ul>
                         <li data-key="exp-percons-1">Criação de artes para posts em redes sociais.</li>
                         <li data-key="exp-percons-2">Redigir documentos internos com a identidade visual da empresa.
                         </li>
-                        <li data-key="exp-percons-3">Criar e fechar arquivos para impressões.</li>
+                        <li data-key="exp-percons-3">Criar e fechar arquivos para impressos (material offiline).</li>
                         <li data-key="exp-percons-4">Elaborar e criar identidades visuais e logos para marcas.</li>
                         <li data-key="exp-percons-5">Design de apresentações empresariais.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cv-timeline-item">
+                <div class="cv-year">2026 - Atual</div>
+                <div class="cv-content">
+                    <h3 data-key="exp-blackco-title">Black&CO - Designer Gráfico Pleno | Voluntário</h3>
+                    <ul>
+                        <li data-key="exp-blackco-1">Elaboração de copy-writhing da arte.</li>
+                        <li data-key="exp-blackco-2">Elaboração de tema.</li>
+                        <li data-key="exp-blackco-3">Criação de artes para carrosséis no Instagram.</li>
                     </ul>
                 </div>
             </div>
