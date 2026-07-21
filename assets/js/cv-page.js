@@ -164,6 +164,7 @@ const cvTranslations = {
         'software-office-title': 'Softwares de Escritório',
         'software-programming-title': 'Programação e suas linguagens',
         'software-os-title': 'Sistemas Operacionais',
+        'cv-expectativa-title': 'O que almejo',
         
         // Níveis
         'level-advanced': 'Avançado',
@@ -283,6 +284,7 @@ const cvTranslations = {
         'software-office-title': 'Office Software',
         'software-programming-title': 'Programming and Languages',
         'software-os-title': 'Operating Systems',
+        'cv-expectativa-title': 'What I Aim For',
         
         // Levels
         'level-advanced': 'Advanced',

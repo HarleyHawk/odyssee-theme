@@ -1448,7 +1448,7 @@ function renderilustracaoDigitalServices() {
 // ==============================================
 // ESTADO GLOBAL E ELEMENTOS DOM
 // ==============================================
-let currentLanguage = (window.safeStorage && window.safeStorage.getItem('userLang')) || 'pt';
+let currentLanguage = (window.safeStorage && window.safeStorage.getItem('userLang')) || (typeof localStorage !== 'undefined' ? localStorage.getItem('userLang') : null) || 'pt';
 const body = document.body;
 const container = document.getElementById('onboarding-container');
 const sidebar = document.getElementById('settings-sidebar');

@@ -276,18 +276,20 @@
         loadAllData();
     }
 
-    // Recarregar descrição quando o idioma muda
+    // Recarregar tudo quando o idioma muda
     window.addEventListener('storage', (e) => {
         if (e.key === 'userLang') {
-            console.log('[CV-PAGE-ADMIN] Idioma mudou, atualizando descrição...');
-            loadDescription();
+            console.log('[CV-PAGE-ADMIN] Idioma mudou, atualizando dados...');
+            loadAllData();
+            if (typeof translateCVPage === 'function') setTimeout(translateCVPage, 50);
         }
     });
 
     window.addEventListener('odyssee-storage', (e) => {
         if (e.detail && e.detail.key === 'userLang') {
-            console.log('[CV-PAGE-ADMIN] Idioma mudou, atualizando descrição...');
-            loadDescription();
+            console.log('[CV-PAGE-ADMIN] Idioma mudou, atualizando dados...');
+            loadAllData();
+            if (typeof translateCVPage === 'function') setTimeout(translateCVPage, 50);
         }
     });
 

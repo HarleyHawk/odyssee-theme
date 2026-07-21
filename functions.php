@@ -11,9 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 // CARREGAMENTO DE MÓDULOS DO TEMA
 // ==============================================
 
-// Módulo de Administração da Página Sobre Mim (CV)
+// Módulo de Administração da Página Sobre Mim (CV) e FAQ
 if ( is_admin() ) {
     require_once get_template_directory() . '/inc/cv-admin.php';
+    require_once get_template_directory() . '/inc/faq-admin.php';
 }
 
 // ==============================================
@@ -137,11 +138,19 @@ function odyssee_seo_meta_tags() {
     $site_url    = home_url();
     $locale      = 'pt_BR';
 
+    $req_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+
     // Determinar título, descrição e imagem por página
     if ( is_front_page() ) {
         $title = 'Odyssee — Creative Experience | Design, Vídeo, Motion & Ilustração';
         $desc  = 'Portfólio e serviços de Design Gráfico, Edição de Vídeo, Motion Graphics e Ilustração Digital. Experiência criativa de alto nível por Renato Harley Paiva.';
         $url   = $site_url;
+        $image = $default_img;
+        $type  = 'website';
+    } elseif ( is_home() || is_archive() || is_page( 'posts' ) || is_page( 'todos-os-posts' ) || ( strpos( $req_uri, '/posts' ) !== false && ! is_singular( 'post' ) ) ) {
+        $title = 'Todos os Posts — Odyssee Experience';
+        $desc  = 'Explore todos os projetos, artes, edições de vídeo, ilustrações digitais e artigos criativos da Odyssee por Renato Harley Paiva.';
+        $url   = home_url( '/posts/' );
         $image = $default_img;
         $type  = 'website';
     } elseif ( is_singular( 'post' ) ) {
@@ -200,6 +209,50 @@ function odyssee_seo_meta_tags() {
     echo '<link rel="canonical" href="' . esc_url( $url ) . '">' . "\n";
 }
 add_action( 'wp_head', 'odyssee_seo_meta_tags', 1 );
+
+// ==============================================
+// SEO: Filtro de Título da Aba do Navegador (<title>)
+// ==============================================
+function odyssee_custom_document_title( $title ) {
+    $req_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+
+    // Página "Todos os Posts"
+    if ( is_home() || is_archive() || is_page( 'posts' ) || is_page( 'todos-os-posts' ) || ( strpos( $req_uri, '/posts' ) !== false && ! is_singular( 'post' ) ) ) {
+        return 'Todos os Posts — Odyssee Experience';
+    }
+
+    if ( is_front_page() ) {
+        return 'Odyssee — Creative Experience | Design, Vídeo, Motion & Ilustração';
+    }
+
+    if ( is_singular( 'post' ) ) {
+        return get_the_title() . ' — Odyssee Experience';
+    }
+
+    if ( is_page( 'faq' ) || is_page_template( 'faq.php' ) ) {
+        return 'FAQ — Perguntas Frequentes | Odyssee Experience';
+    }
+
+    if ( is_page( 'sobre-mim' ) || is_page_template( 'page-sobre-mim.php' ) ) {
+        return 'Sobre Mim — Renato Harley Paiva | Odyssee Experience';
+    }
+
+    if ( is_page( 'servicos' ) || is_page_template( 'page-servicos.php' ) ) {
+        return 'Serviços e Preços | Odyssee Experience';
+    }
+
+    return $title;
+}
+add_filter( 'pre_get_document_title', 'odyssee_custom_document_title', 999 );
+
+add_filter( 'document_title_parts', function( $title_parts ) {
+    $req_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+    if ( is_home() || is_archive() || is_page( 'posts' ) || is_page( 'todos-os-posts' ) || ( strpos( $req_uri, '/posts' ) !== false && ! is_singular( 'post' ) ) ) {
+        $title_parts['title'] = 'Todos os Posts';
+        $title_parts['site']  = 'Odyssee Experience';
+    }
+    return $title_parts;
+}, 999 );
 
 // ==============================================
 // SEO: JSON-LD Structured Data (Schema.org)
@@ -458,12 +511,14 @@ add_action( 'rest_api_init', function() {
  * no menu do WordPress em Aparência > Avisos de Serviços.
  */
 function odyssee_avisos_admin_menu() {
-    add_theme_page(
+    add_menu_page(
         'Avisos de Serviços',          // Título da página
         'Avisos de Serviços',          // Texto no menu
-        'manage_options',               // Permissão necessária
-        'odyssee-avisos-servicos',      // Slug da página
-        'odyssee_avisos_admin_page'     // Callback que renderiza
+        'manage_options',              // Permissão necessária
+        'odyssee-avisos-servicos',     // Slug da página
+        'odyssee_avisos_admin_page',    // Callback que renderiza
+        'dashicons-megaphone',         // Ícone
+        27                             // Posição no menu
     );
 }
 add_action( 'admin_menu', 'odyssee_avisos_admin_menu' );
@@ -735,12 +790,14 @@ function odyssee_get_unit_price_definitions() {
  * Registra a página de admin "Preços e Descontos"
  */
 function odyssee_precos_admin_menu() {
-    add_theme_page(
+    add_menu_page(
         'Preços e Descontos',
         'Preços e Descontos',
         'manage_options',
         'odyssee-precos',
-        'odyssee_precos_admin_page'
+        'odyssee_precos_admin_page',
+        'dashicons-tag',
+        28
     );
 }
 add_action( 'admin_menu', 'odyssee_precos_admin_menu' );
@@ -952,12 +1009,14 @@ function odyssee_get_categorias_produto() {
  * Registra a página de admin "Gerenciar Produtos"
  */
 function odyssee_produtos_admin_menu() {
-    add_theme_page(
+    add_menu_page(
         'Gerenciar Produtos',
         'Gerenciar Produtos',
         'manage_options',
         'odyssee-produtos',
-        'odyssee_produtos_admin_page'
+        'odyssee_produtos_admin_page',
+        'dashicons-cart',
+        29
     );
 }
 add_action( 'admin_menu', 'odyssee_produtos_admin_menu' );
