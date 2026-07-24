@@ -42,7 +42,7 @@ function odyssee_security_headers() {
     $is_localhost = isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false);
 
     // Content Security Policy base
-    $csp_policy = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com https://www.instagram.com https://platform.instagram.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://odysseexp.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.instagram.com https://graph.instagram.com; frame-src 'self' https://www.instagram.com https://www.facebook.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';";
+    $csp_policy = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com https://www.instagram.com https://*.instagram.com https://platform.instagram.com https://*.cdninstagram.com https://connect.facebook.net https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.instagram.com https://*.cdninstagram.com; img-src 'self' data: https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://odysseexp.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.instagram.com https://*.instagram.com https://graph.instagram.com https://*.cdninstagram.com https://www.youtube.com https://*.youtube.com; frame-src 'self' https://www.instagram.com https://*.instagram.com https://www.facebook.com https://*.facebook.com https://www.youtube.com https://*.youtube.com https://www.youtube-nocookie.com https://*.youtube-nocookie.com https://player.vimeo.com https://*.vimeo.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';";
     
     if ( ! $is_localhost ) {
         $csp_policy .= " upgrade-insecure-requests;";
@@ -135,18 +135,41 @@ add_action( 'wp_footer', function() {
     global $post;
     if ( empty( $post->post_content ) ) return;
 
-    // Verifica se o conteúdo do post contém um embed do Instagram
-    $has_instagram = strpos( $post->post_content, 'instagram.com' ) !== false
-                  || strpos( $post->post_content, 'instagram-media' ) !== false
-                  || strpos( $post->post_content, 'wp-block-embed-instagram' ) !== false;
+    $content = $post->post_content;
+
+    // Detecta qualquer variação de embed do Instagram (URLs, domínios reduzidos instagr.am, classes de blocos, etc.)
+    $has_instagram = ( stripos( $content, 'instagram.com' ) !== false )
+                  || ( stripos( $content, 'instagr.am' ) !== false )
+                  || ( stripos( $content, 'instagram-media' ) !== false )
+                  || ( stripos( $content, 'wp-block-embed-instagram' ) !== false )
+                  || ( stripos( $content, 'embed' ) !== false );
 
     if ( ! $has_instagram ) return;
 
     // Gera o nonce CSP para este script externo
     $nonce = odyssee_generate_csp_nonce();
 
-    // Injeta o script do Instagram com o nonce para passar na CSP
-    echo '<script async nonce="' . esc_attr( $nonce ) . '" src="//www.instagram.com/embed.js"></script>' . "\n";
+    // Injeta o script do Instagram com nonce e processador dinâmico instgrm.Embeds.process()
+    ?>
+    <script async nonce="<?php echo esc_attr( $nonce ); ?>" src="//www.instagram.com/embed.js" onload="if(window.instgrm&&window.instgrm.Embeds){window.instgrm.Embeds.process();}"></script>
+    <script nonce="<?php echo esc_attr( $nonce ); ?>">
+    (function() {
+        function processInstagramEmbeds() {
+            if (window.instgrm && window.instgrm.Embeds && typeof window.instgrm.Embeds.process === 'function') {
+                window.instgrm.Embeds.process();
+            }
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', processInstagramEmbeds);
+        } else {
+            processInstagramEmbeds();
+        }
+        window.addEventListener('load', processInstagramEmbeds);
+        setTimeout(processInstagramEmbeds, 1000);
+        setTimeout(processInstagramEmbeds, 3000);
+    })();
+    </script>
+    <?php
 }, 20 );
 
 // Hooks principais do tema
