@@ -3,7 +3,7 @@ Theme Name: Odyssee Experience
 Theme URI: https://odysseexp.com
 Author: Harley
 Description: Tema customizado para o site da Odyssee Experience, focado em uma estética moderna e vibrante, com opções de personalização de cores e modo escuro.
-Version: 26.7.2
+Version: 26.7.3
 /* ==========================
    VARIAVEIS GLOBAIS DO TEMA
    ==========================
@@ -445,23 +445,32 @@ body.modo-onboarding .onboarding-aurora {
 
 /* Estilo de cada botão: fundo semitransparente com desfoque */
 .button-group button {
-    font-size: 1.2rem;
-    font-weight: bold;
-    background: rgba(30, 30, 35, 0.5);
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(0, 0, 0, 0.12) 100%), var(--bg-card, #23232d);
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 1.5rem 2rem;
-    border-radius: 12px;
+    border: none;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.25);
+    padding: 0.8rem 1.6rem;
+    border-radius: 50px;
     cursor: pointer;
-    transition: 0.2s;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px)
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 /* Hover dos botões: fundo um pouco mais claro */
 .button-group button:hover {
-    background: rgba(30, 30, 35, 0.65);
-    border-color: rgba(255, 255, 255, 0.25)
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* ---- THEME PICKER (BOTÕES DE TEMA CLARO/ESCURO) ---- */
@@ -476,13 +485,11 @@ body.modo-onboarding .onboarding-aurora {
 /* Botões do theme picker DENTRO do onboarding: círculos com ícones */
 #onboarding-container .theme-picker button {
     font-size: 2rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 50%;
     width: 60px;
     height: 60px;
     margin: 0 10px;
-    color: #ffffff;
+    color: var(--color-text, #111111) !important;
     transition: 0.2s;
     display: inline-flex;
     align-items: center;
@@ -544,24 +551,35 @@ body.theme-dark .theme-picker button {
 */
 #mobile-menu-overlay .mobile-menu-footer .btn-mobile-faq,
 #mobile-menu-overlay .mobile-menu-footer .btn-mobile-settings {
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1rem;
-    padding: 0.9rem 1rem;
-    border-radius: 8px;
-    border: none;
-    background: transparent;
-    color: var(--color-text);
-    text-decoration: none
+    width: 100% !important;
+    height: 42px !important;
+    padding: 0 14px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    border-radius: 50px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0.12) 100%), var(--bg-card) !important;
+    border: none !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.35),
+        0 3px 8px rgba(0, 0, 0, 0.2) !important;
+    color: var(--color-text) !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
 }
 
 /* Tamanho dos ícones dentro dos botões mobile */
 #mobile-menu-overlay .mobile-menu-footer .btn-mobile-faq .icon-svg,
 #mobile-menu-overlay .mobile-menu-footer .btn-mobile-settings .icon-svg {
-    width: 1.2rem;
-    height: 1.2rem
+    width: 18px !important;
+    height: 18px !important;
+    flex-shrink: 0 !important;
+    fill: var(--color-text) !important;
+    color: var(--color-text) !important;
 }
 
 /* ---- NAVEGAÇÃO SECUNDÁRIA (HEADER DIREITO) ----
@@ -585,12 +603,25 @@ body.theme-dark .theme-picker button {
     margin-left: 8px
 }
 
-/* Força os SVGs do theme picker a seguirem a cor do texto */
+/* Força os SVGs do theme picker a seguirem a cor do texto (escuro no modo claro, claro no modo escuro) */
+.theme-picker button,
+.setting-group .theme-picker button,
+#onboarding-container .theme-picker button {
+    color: var(--color-text) !important;
+}
+
+.theme-picker button svg,
+.theme-picker button .icon-svg,
+.theme-picker button .icon-svg path,
+.theme-picker button svg path,
 .setting-group .theme-picker button svg,
 .setting-group .theme-picker button .icon-svg,
-.setting-group .theme-picker button .icon-svg path {
+.setting-group .theme-picker button .icon-svg path,
+#onboarding-container .theme-picker button svg,
+#onboarding-container .theme-picker button .icon-svg,
+#onboarding-container .theme-picker button .icon-svg path {
     fill: var(--color-text) !important;
-    color: var(--color-text) !important
+    color: var(--color-text) !important;
 }
 
 /* Botão de FAQ com ícone alinhado */
@@ -683,25 +714,31 @@ body.theme-dark .theme-picker button {
 /* Botão "Continuar" do onboarding: arredondado, cor de destaque, centralizado */
 #btn-continuar {
     margin-top: 2rem;
-    padding: 1rem 3rem;
-    font-size: 1.2rem;
-    font-weight: bold;
-    background-color: var(--color-accent);
+    padding: 0.9rem 2.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(0, 0, 0, 0.12) 100%), var(--color-accent);
     color: #fff;
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: block;
     margin-left: auto;
     margin-right: auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3)
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.25);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Hover do botão continuar: cresce e ganha brilho */
+/* Hover do botão continuar */
 #btn-continuar:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 20px var(--color-accent)
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* Parágrafos dentro do onboarding ficam semi-transparentes */
@@ -1368,23 +1405,6 @@ body.theme-dark .theme-picker button {
 }
 
 /* Repetição dos botões mobile com borda mais visível */
-#mobile-menu-overlay .mobile-menu-footer .btn-mobile-faq,
-#mobile-menu-overlay .mobile-menu-footer .btn-mobile-settings {
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    border-radius: 8px;
-    border: none
-}
-
-#mobile-menu-overlay .mobile-menu-footer .btn-mobile-faq .icon-svg,
-#mobile-menu-overlay .mobile-menu-footer .btn-mobile-settings .icon-svg {
-    width: 1.2rem;
-    height: 1.2rem
-}
 
 /* ---- CONTEÚDO DO CARD DE SERVIÇO ----
    Área abaixo da thumbnail com título, preço, descrição e botões.
@@ -4397,6 +4417,30 @@ body.theme-dark .service-notice {
         gap: 1rem
     }
 
+    /* Cards de ilustração: scroll horizontal no mobile (igual aos outros grids) */
+    .ilustracao-configurador .services-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        grid-template-columns: unset !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+        margin-left: -1rem !important;
+        margin-right: -1rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .ilustracao-configurador .services-grid>.service-card {
+        flex: 0 0 auto !important;
+        min-width: 200px !important;
+        max-width: 260px !important;
+        scroll-snap-align: start !important;
+    }
+
     .service-card {
         min-height: 150px;
         padding: 1rem
@@ -4424,4 +4468,281 @@ body.theme-dark .service-notice {
     .resumo-preco {
         font-size: 1.2rem
     }
+}
+
+/* =========================================================
+   ESTILO MODERNO DE BOTÕES: PILLOW GLOW 3D (SUAVE E LIMPO)
+   ========================================================= */
+
+/* Botões e Pílulas Preenchidos Principais (Com Cor de Destaque) */
+.btn-primary,
+.service-actions button,
+.package-card button,
+#ilustracao-btn-contratar button,
+.faq-link,
+.btn-download,
+.btn-download-cv,
+.comment-form-wrapper button[type="submit"],
+.footer-section button,
+.btn-header-about,
+.btn-back,
+.hero-btn,
+.main-nav a.nav-highlight,
+.mobile-link.nav-highlight,
+.category-image-placeholder {
+    border-radius: 50px !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(0, 0, 0, 0.12) 100%), var(--color-accent) !important;
+    border: none !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.25) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: 600 !important;
+    letter-spacing: 0.2px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Hover nos botões principais */
+.btn-primary:hover,
+.service-actions button:hover,
+.package-card button:hover,
+#ilustracao-btn-contratar button:hover,
+.faq-link:hover,
+.btn-download:hover,
+.btn-download-cv:hover,
+.comment-form-wrapper button[type="submit"]:hover,
+.footer-section button:hover,
+.btn-header-about:hover,
+.btn-back:hover,
+.hero-btn:hover,
+.main-nav a.nav-highlight:hover,
+.mobile-link.nav-highlight:hover,
+.category-image-placeholder:hover {
+    transform: translateY(-2px) !important;
+    filter: brightness(1.08) !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Active nos botões principais */
+.btn-primary:active,
+.service-actions button:active,
+.package-card button:active,
+#ilustracao-btn-contratar button:active,
+.faq-link:active,
+.btn-download:active,
+.btn-download-cv:active,
+.comment-form-wrapper button[type="submit"]:active,
+.footer-section button:active,
+.btn-header-about:active,
+.btn-back:active,
+.hero-btn:active,
+.main-nav a.nav-highlight:active,
+.mobile-link.nav-highlight:active,
+.category-image-placeholder:active {
+    transform: translateY(1px) !important;
+    box-shadow: inset 0 2px 3px 0 rgba(0, 0, 0, 0.4),
+        0 1px 4px rgba(0, 0, 0, 0.2) !important;
+    filter: brightness(0.96) !important;
+}
+
+/* Bolinhas de Seleção de Cor no Seletor de Tema (.color-dot) */
+.color-dot {
+    border-radius: 50% !important;
+    border: none !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.4),
+        0 3px 8px rgba(0, 0, 0, 0.25) !important;
+    transition: all 0.2s ease !important;
+}
+
+.color-dot.blue {
+    background-color: #5371E2 !important;
+}
+
+.color-dot.purple {
+    background-color: #9E51FF !important;
+}
+
+.color-dot.red {
+    background-color: #D6183A !important;
+}
+
+.color-dot.yellow {
+    background-color: #d29512 !important;
+}
+
+.color-dot.green {
+    background-color: #1EB558 !important;
+}
+
+/* Botões do Seletor de Tema Sol/Lua e Ícones do Header */
+.setting-group .theme-picker button,
+#onboarding-container .theme-picker button,
+.btn-header-icon,
+.btn-mobile-faq,
+.btn-mobile-settings {
+    border-radius: 50px !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0.12) 100%), var(--bg-card) !important;
+    border: none !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.35),
+        0 3px 8px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.2s ease !important;
+}
+
+.setting-group .theme-picker button:hover,
+#onboarding-container .theme-picker button:hover,
+.btn-header-icon:hover,
+.btn-mobile-faq:hover,
+.btn-mobile-settings:hover {
+    transform: translateY(-1px) !important;
+    filter: brightness(1.06) !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+        inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.45),
+        0 5px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* =========================================================
+   GRADIENTE ANIMADO PARA TÍTULOS GRANDES (CORES DO TEMA)
+   ========================================================= */
+
+@keyframes titleGradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.hero-slogan,
+.section-title,
+.services-hero h1,
+.faq-title,
+.cv-title,
+.cv-section-title,
+.page-title {
+    background: linear-gradient(90deg, var(--color-title) 0%, var(--color-accent) 50%, var(--color-title) 100%) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    color: transparent !important;
+    animation: titleGradientMove 8s ease-in-out infinite !important;
+}
+
+/* =========================================================
+   ESTILOS PARA BOTÕES DE IDIOMA EM 1 LINHA E CORES COM NOME
+   ========================================================= */
+
+.button-group.lang-button-group,
+.setting-group .button-group,
+#step-language .button-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+.button-group .lang-btn,
+.setting-group #set-lang-pt,
+.setting-group #set-lang-en,
+#step-language #lang-pt,
+#step-language #lang-en {
+    flex: 1 !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 48px !important;
+    padding: 0 8px !important;
+    border-radius: 50px !important;
+    white-space: nowrap !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.2px !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0.12) 100%), var(--bg-card) !important;
+    border: none !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35), inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.35), 0 3px 8px rgba(0, 0, 0, 0.2) !important;
+    color: var(--color-text) !important;
+    transition: all 0.2s ease !important;
+}
+
+.button-group .lang-btn:hover,
+.setting-group #set-lang-pt:hover,
+.setting-group #set-lang-en:hover,
+#step-language #lang-pt:hover,
+#step-language #lang-en:hover {
+    transform: translateY(-1px) !important;
+    filter: brightness(1.08) !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.45), inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.45), 0 5px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.flag-emoji {
+    font-size: 18px !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+}
+
+.color-picker-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    gap: 12px 6px !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+}
+
+.color-option-btn {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    cursor: pointer !important;
+    padding: 6px 4px !important;
+    border-radius: 10px !important;
+    transition: transform 0.2s ease, background 0.2s ease !important;
+    min-width: 44px !important;
+}
+
+.color-option-btn:hover {
+    transform: translateY(-2px) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.color-option-btn .color-dot {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+}
+
+.color-option-btn .color-name {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    margin-top: 6px !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+    letter-spacing: 0.3px !important;
+    white-space: nowrap !important;
 }

@@ -11,12 +11,16 @@
     <div class="sidebar-content">
         <div class="setting-group">
             <h4 data-key="idioma">Idioma</h4>
-            <div class="button-group" style="gap: 0.5rem;">
-                <button id="set-lang-pt">PT-BR</button>
-                <button id="set-lang-en">EN-US</button>
+            <div class="button-group lang-button-group">
+                <button id="set-lang-pt" class="lang-btn">
+                    <span class="flag-emoji">🇧🇷</span> <span>Português Brasileiro</span>
+                </button>
+                <button id="set-lang-en" class="lang-btn">
+                    <span class="flag-emoji">🇬🇧</span> <span>Inglês</span>
+                </button>
             </div>
         </div>
-        <hr class="divider" style="margin: 2rem 0; border: 0; height: 1px; background-color: var(--color-accent); opacity: 0.3;">
+        <hr class="divider" style="margin: 1.5rem 0; border: 0; height: 1px; background-color: var(--color-accent); opacity: 0.3;">
         <div class="setting-group">
             <h4 data-key="tema">Tema</h4>
             <div class="theme-picker">
@@ -28,15 +32,30 @@
                     </svg></button>
             </div>
         </div>
-        <hr class="divider" style="margin: 2rem 0; border: 0; height: 1px; background-color: var(--color-accent); opacity: 0.3;">
+        <hr class="divider" style="margin: 1.5rem 0; border: 0; height: 1px; background-color: var(--color-accent); opacity: 0.3;">
         <div class="setting-group">
             <h4 data-key="cor-destaque">Cor de Destaque</h4>
-            <div class="color-picker" style="flex-wrap: wrap;">
-                <button class="color-dot blue" id="set-color-blue"></button>
-                <button class="color-dot purple" id="set-color-purple"></button>
-                <button class="color-dot red" id="set-color-red"></button>
-                <button class="color-dot yellow" id="set-color-yellow"></button>
-                <button class="color-dot green" id="set-color-green"></button>
+            <div class="color-picker-grid">
+                <button class="color-option-btn" id="set-color-blue" data-color="blue">
+                    <span class="color-dot blue"></span>
+                    <span class="color-name" data-key="cor-azul">Azul</span>
+                </button>
+                <button class="color-option-btn" id="set-color-purple" data-color="purple">
+                    <span class="color-dot purple"></span>
+                    <span class="color-name" data-key="cor-roxo">Roxo</span>
+                </button>
+                <button class="color-option-btn" id="set-color-red" data-color="red">
+                    <span class="color-dot red"></span>
+                    <span class="color-name" data-key="cor-vermelho">Vermelho</span>
+                </button>
+                <button class="color-option-btn" id="set-color-yellow" data-color="yellow">
+                    <span class="color-dot yellow"></span>
+                    <span class="color-name" data-key="cor-amarelo">Amarelo</span>
+                </button>
+                <button class="color-option-btn" id="set-color-green" data-color="green">
+                    <span class="color-dot green"></span>
+                    <span class="color-name" data-key="cor-verde">Verde</span>
+                </button>
             </div>
         </div>
     </div>

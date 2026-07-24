@@ -696,6 +696,9 @@ function odyssee_get_price_definitions() {
         'design_servicos' => array(
             'label' => 'Design Gráfico — Serviços',
             'items' => array(
+                'design_post'    => array( 'label' => 'Post',                          'default' => 20.00 ),
+                'design_storie'  => array( 'label' => 'Storie',                        'default' => 25.00 ),
+                'design_carrossel' => array( 'label' => 'Carrossel',                   'default' => 100.00 ),
                 'logotipologo'   => array( 'label' => 'Logotipo e Logo',               'default' => 49.00 ),
                 'bannersocial'   => array( 'label' => 'Banner para redes sociais',      'default' => 79.00 ),
                 'visualid'       => array( 'label' => 'Cartão de Visitas',              'default' => 599.00 ),
@@ -778,11 +781,11 @@ function odyssee_get_price_definitions() {
 function odyssee_get_unit_price_definitions() {
     return array(
         'design_post'      => array( 'label' => 'Post (unitário)',        'default' => 20.00 ),
-        'design_storie'    => array( 'label' => 'Storie (unitário)',      'default' => 25.00 ),
-        'design_carrossel' => array( 'label' => 'Carrossel (unitário)',   'default' => 100.00 ),
-        'video_longo'      => array( 'label' => 'Vídeo Longo (unitário)', 'default' => 350.00 ),
-        'video_curto'      => array( 'label' => 'Vídeo Curto (unitário)', 'default' => 100.00 ),
-        'thumbnail'        => array( 'label' => 'Thumbnail (unitário)',   'default' => 20.00 ),
+        'design_storie'    => array( 'label' => 'Storie (unitário)',      'default' => 22.00 ),
+        'design_carrossel' => array( 'label' => 'Carrossel (unitário)',   'default' => 60.00 ),
+        'video_longo'      => array( 'label' => 'Vídeo Longo (unitário)', 'default' => 380.00 ),
+        'video_curto'      => array( 'label' => 'Vídeo Curto (unitário)', 'default' => 120.00 ),
+        'thumbnail'        => array( 'label' => 'Thumbnail (unitário)',   'default' => 30.00 ),
     );
 }
 
@@ -858,6 +861,12 @@ function odyssee_sanitize_overrides( $input ) {
         }
         if ( isset( $fields['informativo'] ) && trim( $fields['informativo'] ) !== '' ) {
             $sanitized['informativo'] = sanitize_textarea_field( $fields['informativo'] );
+        }
+        if ( isset( $fields['ordem'] ) && trim( $fields['ordem'] ) !== '' ) {
+            $sanitized['ordem'] = intval( $fields['ordem'] );
+        }
+        if ( isset( $fields['oculto'] ) ) {
+            $sanitized['oculto'] = ( $fields['oculto'] == '1' || $fields['oculto'] === 1 ) ? 1 : 0;
         }
         if ( ! empty( $sanitized ) ) {
             $clean[ $id ] = $sanitized;
@@ -986,6 +995,201 @@ function odyssee_precos_admin_page() {
             <?php submit_button( 'Salvar Preços' ); ?>
         </form>
     </div>
+
+    <style>
+    .odyssee-calculator-box {
+        margin-top: 8px;
+        padding: 10px 14px;
+        background: #f0f6fc;
+        border: 1px solid #c8d8e7;
+        border-left: 4px solid #2271b1;
+        border-radius: 6px;
+        font-size: 13px;
+        max-width: 600px;
+    }
+    .odyssee-calc-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 6px;
+    }
+    .odyssee-calc-brute {
+        font-weight: 600;
+        color: #1d2327;
+    }
+    .odyssee-calc-discount {
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        display: inline-block;
+    }
+    .odyssee-calc-discount.has-discount {
+        background: #d1e7dd;
+        color: #0f5132;
+        border: 1px solid #badbcc;
+    }
+    .odyssee-calc-discount.no-discount {
+        background: #fff3cd;
+        color: #664d03;
+        border: 1px solid #ffecb5;
+    }
+    .odyssee-calc-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .odyssee-calc-actions .btn-suggest {
+        padding: 2px 8px !important;
+        font-size: 11px !important;
+        height: auto !important;
+        min-height: 24px !important;
+        line-height: 20px !important;
+    }
+    </style>
+
+    <script>
+    (function() {
+        const packageCompositions = {
+            'designmegapackage': { post: 10, storie: 10, carrossel: 10 },
+            'designpremiumpackage': { post: 5, storie: 5, carrossel: 5 },
+            'postpackage': { post: 5 },
+            'storiepackage': { storie: 5 },
+            'carrosselpackage': { carrossel: 5 },
+            'mega_pacote': { longo: 5, curto: 10, thumbnail: 15 },
+            'pacote_premium_a': { longo: 5, thumbnail: 5 },
+            'pacote_premium_b': { curto: 5, thumbnail: 5 },
+            'cinco_videos_longos': { longo: 5 },
+            'cinco_videos_curtos': { curto: 5 },
+            'cinco_thumbnails': { thumbnail: 5 },
+            'dez_thumbnails': { thumbnail: 10 }
+        };
+
+        const defaultUnitPrices = {
+            post: 20.00,
+            storie: 22.00,
+            carrossel: 100.00,
+            longo: 380.00,
+            curto: 120.00,
+            thumbnail: 30.00
+        };
+
+        const unitFieldIds = {
+            post: ['odyssee_preco_design_post', 'odyssee_unit_design_post'],
+            storie: ['odyssee_preco_design_storie', 'odyssee_unit_design_storie'],
+            carrossel: ['odyssee_preco_design_carrossel', 'odyssee_unit_design_carrossel'],
+            longo: ['odyssee_preco_video_longo', 'odyssee_unit_video_longo'],
+            curto: ['odyssee_preco_video_curto', 'odyssee_unit_video_curto'],
+            thumbnail: ['odyssee_preco_thumbnail', 'odyssee_unit_thumbnail']
+        };
+
+        function getUnitPriceValue(key) {
+            const ids = unitFieldIds[key] || [];
+
+            // 1. Tenta valor digitado pelo usuário em tempo real no campo de serviços ou unitário
+            for (let i = 0; i < ids.length; i++) {
+                const field = document.getElementById(ids[i]);
+                if (field && field.value !== '' && field.value !== null) {
+                    const val = parseFloat(field.value);
+                    if (!isNaN(val) && val > 0) return val;
+                }
+            }
+
+            // 2. Tenta placeholder do campo (preço padrão do formulário)
+            for (let i = 0; i < ids.length; i++) {
+                const field = document.getElementById(ids[i]);
+                if (field && field.placeholder !== '' && field.placeholder !== null) {
+                    const raw = field.placeholder.replace(/\./g, '').replace(',', '.');
+                    const val = parseFloat(raw);
+                    if (!isNaN(val) && val > 0) return val;
+                }
+            }
+
+            // 3. Fallback
+            return defaultUnitPrices[key] || 0;
+        }
+
+        function calculatePackageBrute(pkgId) {
+            const comp = packageCompositions[pkgId];
+            if (!comp) return 0;
+            let total = 0;
+            for (const item in comp) {
+                total += comp[item] * getUnitPriceValue(item);
+            }
+            return total;
+        }
+
+        function updateCalculations() {
+            for (const pkgId in packageCompositions) {
+                const input = document.getElementById('odyssee_preco_' + pkgId);
+                if (!input) continue;
+
+                let box = input.closest('td').querySelector('.odyssee-calculator-box');
+                if (!box) {
+                    box = document.createElement('div');
+                    box.className = 'odyssee-calculator-box';
+                    input.closest('td').appendChild(box);
+                }
+
+                const brute = calculatePackageBrute(pkgId);
+                const currentPrice = parseFloat(input.value) || 0;
+                const discount = brute - currentPrice;
+                const discountPercent = brute > 0 && currentPrice > 0 ? ((discount / brute) * 100).toFixed(1) : 0;
+
+                let discountBadgeHTML = '';
+                if (currentPrice > 0 && discount > 0) {
+                    discountBadgeHTML = `<span class="odyssee-calc-discount has-discount">🔥 Economia no site: R$ ${discount.toFixed(2).replace('.', ',')} (${discountPercent}% OFF)</span>`;
+                } else if (currentPrice > 0) {
+                    discountBadgeHTML = `<span class="odyssee-calc-discount no-discount">Sem desconto (Preço igual ou maior que o bruto)</span>`;
+                } else {
+                    discountBadgeHTML = `<span class="odyssee-calc-discount no-discount">Insira um preço para ver o desconto</span>`;
+                }
+
+                box.innerHTML = `
+                    <div class="odyssee-calc-row">
+                        <span class="odyssee-calc-brute">Soma Bruta dos Itens: R$ ${brute.toFixed(2).replace('.', ',')}</span>
+                        ${discountBadgeHTML}
+                    </div>
+                    <div class="odyssee-calc-actions">
+                        <span style="font-weight: 500;">Sugerir Preço com Desconto:</span>
+                        <button type="button" class="button button-small btn-suggest" data-pkg="${pkgId}" data-pct="0.10">-10% (R$ ${(brute * 0.90).toFixed(2).replace('.', ',')})</button>
+                        <button type="button" class="button button-small btn-suggest" data-pkg="${pkgId}" data-pct="0.15">-15% (R$ ${(brute * 0.85).toFixed(2).replace('.', ',')})</button>
+                        <button type="button" class="button button-small btn-suggest" data-pkg="${pkgId}" data-pct="0.20">-20% (R$ ${(brute * 0.80).toFixed(2).replace('.', ',')})</button>
+                        <button type="button" class="button button-small btn-suggest" data-pkg="${pkgId}" data-pct="0.00">Bruto (0%)</button>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCalculations();
+
+            // Eventos de alteração de preços unitários ou pacotes
+            document.querySelectorAll('input[id^="odyssee_unit_"], input[id^="odyssee_preco_"]').forEach(input => {
+                input.addEventListener('input', updateCalculations);
+                input.addEventListener('change', updateCalculations);
+            });
+
+            // Clique nos botões de sugestão rápida
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-suggest');
+                if (!btn) return;
+                e.preventDefault();
+                const pkgId = btn.getAttribute('data-pkg');
+                const pct = parseFloat(btn.getAttribute('data-pct'));
+                const brute = calculatePackageBrute(pkgId);
+                const sug = brute * (1 - pct);
+                const input = document.getElementById('odyssee_preco_' + pkgId);
+                if (input) {
+                    input.value = sug.toFixed(2);
+                    updateCalculations();
+                }
+            });
+        });
+    })();
+    </script>
     <?php
 }
 
@@ -1184,15 +1388,18 @@ function odyssee_produtos_admin_page() {
     // Esses dados são usados como placeholder nos campos de edição da tabela admin
     $servicos_existentes = array(
         'design-grafico' => array(
-            array( 'id' => 'logotipologo',   'nome' => 'Logotipo e Logo',               'descricao' => 'Uma logo única, criativa e estrategicamente feita para captar seu público alvo.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/09/Artboard-3-1-e1757565255458.png', 'tipo' => 'servico' ),
-            array( 'id' => 'bannersocial',   'nome' => 'Banner para redes sociais',      'descricao' => 'Banner para YouTube, Facebook, site, etc.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/07/Screenshot-2025-06-30-184152.png', 'tipo' => 'servico' ),
-            array( 'id' => 'cartao_visitas', 'nome' => 'Cartão de Visitas',              'descricao' => 'Design profissional para seu cartão de visitas.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services.png', 'tipo' => 'servico' ),
-            array( 'id' => 'flyer',          'nome' => 'Flyer',                           'descricao' => 'Arte criativa para seu flyer promocional.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-2.png', 'tipo' => 'servico' ),
-            array( 'id' => 'convites',       'nome' => 'Convites',                        'descricao' => 'Design elegante para seus convites.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-5.png', 'tipo' => 'servico' ),
-            array( 'id' => 'banner',         'nome' => 'Banner (impresso)',               'descricao' => 'Arte para banners de qualquer tamanho.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-4.png', 'tipo' => 'servico' ),
-            array( 'id' => 'botton',         'nome' => 'Arte para Botton',                'descricao' => 'Arte simples para botton personalizado.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-1.png', 'tipo' => 'servico' ),
-            array( 'id' => 'adesivos',       'nome' => 'Arte para Adesivos',              'descricao' => 'Design para adesivos personalizados.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-3.png', 'tipo' => 'servico' ),
-            array( 'id' => 'visualid',       'nome' => 'Identidade Visual',               'descricao' => 'Manual de identidade completa, mockups, brindes e mais!', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/05/Untitled-1-11.jpg', 'tipo' => 'servico' ),
+            array( 'id' => 'design_post',          'nome' => 'Post',                           'descricao' => 'Arte individual para post em redes sociais (Instagram, Facebook, LinkedIn).', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.png', 'tipo' => 'servico' ),
+            array( 'id' => 'design_storie',        'nome' => 'Storie',                         'descricao' => 'Arte individual para stories em redes sociais (Instagram, WhatsApp).', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.png', 'tipo' => 'servico' ),
+            array( 'id' => 'design_carrossel',     'nome' => 'Carrossel',                      'descricao' => 'Arte para carrossel contínuo ou informativo para redes sociais.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.png', 'tipo' => 'servico' ),
+            array( 'id' => 'logotipologo',         'nome' => 'Logotipo e Logo',               'descricao' => 'Uma logo única, criativa e estrategicamente feita para captar seu público alvo.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/09/Artboard-3-1-e1757565255458.png', 'tipo' => 'servico' ),
+            array( 'id' => 'bannersocial',         'nome' => 'Banner para redes sociais',      'descricao' => 'Banner para YouTube, Facebook, site, etc.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/07/Screenshot-2025-06-30-184152.png', 'tipo' => 'servico' ),
+            array( 'id' => 'cartao_visitas',       'nome' => 'Cartão de Visitas',              'descricao' => 'Design profissional para seu cartão de visitas.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services.png', 'tipo' => 'servico' ),
+            array( 'id' => 'flyer',                'nome' => 'Flyer',                           'descricao' => 'Arte criativa para seu flyer promocional.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-2.png', 'tipo' => 'servico' ),
+            array( 'id' => 'convites',             'nome' => 'Convites',                        'descricao' => 'Design elegante para seus convites.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-5.png', 'tipo' => 'servico' ),
+            array( 'id' => 'banner',               'nome' => 'Banner (impresso)',               'descricao' => 'Arte para banners de qualquer tamanho.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-4.png', 'tipo' => 'servico' ),
+            array( 'id' => 'botton',               'nome' => 'Arte para Botton',                'descricao' => 'Arte simples para botton personalizado.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-1.png', 'tipo' => 'servico' ),
+            array( 'id' => 'adesivos',             'nome' => 'Arte para Adesivos',              'descricao' => 'Design para adesivos personalizados.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-3.png', 'tipo' => 'servico' ),
+            array( 'id' => 'visualid',             'nome' => 'Identidade Visual',               'descricao' => 'Manual de identidade completa, mockups, brindes e mais!', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/05/Untitled-1-11.jpg', 'tipo' => 'servico' ),
             array( 'id' => 'designmegapackage',    'nome' => 'Mega Pacote Design',        'descricao' => '10 posts + 10 stories + 10 carrosséis', 'thumbnail' => '', 'tipo' => 'pacote' ),
             array( 'id' => 'designpremiumpackage', 'nome' => 'Pacote Premium Design',     'descricao' => '5 posts + 5 stories + 5 carrosséis', 'thumbnail' => '', 'tipo' => 'pacote' ),
             array( 'id' => 'postpackage',          'nome' => 'Pacote Posts',               'descricao' => '5 posts', 'thumbnail' => '', 'tipo' => 'pacote' ),
@@ -1239,7 +1446,7 @@ function odyssee_produtos_admin_page() {
     if ( ! is_array( $precos_salvos ) ) {
         $precos_salvos = array();
     }
-    // Sobrescritas salvas (nome, descrição, thumbnail)
+    // Sobrescritas salvas (nome, descrição, thumbnail, ordem, oculto)
     $overrides_salvos = get_option( 'odyssee_servicos_overrides', array() );
     if ( ! is_array( $overrides_salvos ) ) {
         $overrides_salvos = array();
@@ -1256,36 +1463,47 @@ function odyssee_produtos_admin_page() {
     ?>
     <div class="wrap">
         <h1><span class="dashicons dashicons-store" style="font-size: 1.3em; margin-right: 8px;"></span>Gerenciar Produtos — Odyssee</h1>
-        <p>Veja todos os serviços do site, edite nome, descrição, capa e preços. Deixe um campo vazio para usar o valor padrão do código.</p>
+        <p>Veja todos os serviços do site, edite nome, descrição, capa, ordem de exibição e alterne visibilidade (ocultar/excluir). Deixe um campo vazio para usar o valor padrão.</p>
 
-        <!-- SEÇÃO: Serviços já existentes no site (edição completa) -->
+        <!-- SEÇÃO: Serviços já existentes no site (edição completa + ordenação + exclusão) -->
         <div style="background: #fff; border: 1px solid #c3c4c7; padding: 20px; margin: 20px 0; border-radius: 4px;">
             <h2 style="margin-top: 0;"><span class="dashicons dashicons-admin-links" style="color: #2271b1;"></span> Serviços Existentes no Site</h2>
-            <p class="description">Edite qualquer campo dos serviços existentes. Deixe vazio para manter o valor padrão. A capa aceita URLs de imagem (use a Biblioteca de Mídia do WP para fazer upload).</p>
+            <p class="description">Edite qualquer campo dos serviços existentes, reordene clicando nos botões ▲ / ▼ e alterne a visibilidade para ocultar/excluir qualquer serviço da página do site.</p>
 
             <form method="post" action="options.php">
                 <?php settings_fields( 'odyssee_precos_group' ); ?>
 
                 <?php foreach ( $servicos_existentes as $cat_slug => $servicos ) :
                     $cat_label = isset( $categorias[ $cat_slug ] ) ? $categorias[ $cat_slug ] : $cat_slug;
+
+                    // Ordenar os serviços pela ordem salva antes de exibir a tabela
+                    usort( $servicos, function( $a, $b ) use ( $overrides_salvos ) {
+                        $id_a = $a['id'];
+                        $id_b = $b['id'];
+                        $ord_a = isset( $overrides_salvos[ $id_a ]['ordem'] ) && $overrides_salvos[ $id_a ]['ordem'] !== '' ? intval( $overrides_salvos[ $id_a ]['ordem'] ) : 999;
+                        $ord_b = isset( $overrides_salvos[ $id_b ]['ordem'] ) && $overrides_salvos[ $id_b ]['ordem'] !== '' ? intval( $overrides_salvos[ $id_b ]['ordem'] ) : 999;
+                        return $ord_a - $ord_b;
+                    });
                 ?>
-                <h3 style="margin-top: 20px; padding-bottom: 6px; border-bottom: 1px solid #ddd; color: #2271b1;">
+                <h3 style="margin-top: 24px; padding-bottom: 6px; border-bottom: 1px solid #ddd; color: #2271b1;">
                     <?php echo esc_html( $cat_label ); ?>
                 </h3>
-                <table class="widefat striped" style="margin-bottom: 12px;">
+                <table class="widefat striped service-reorder-table" style="margin-bottom: 12px;">
                     <thead>
                         <tr>
-                            <th style="width: 60px;">Capa</th>
-                            <th style="width: 160px;">Nome</th>
+                            <th style="width: 75px; text-align: center;">Ordem</th>
+                            <th style="width: 55px; text-align: center;">Capa</th>
+                            <th style="width: 140px;">Nome</th>
                             <th>Descrição</th>
                             <th>Informativo <span class="dashicons dashicons-info" title="Texto do tooltip ao clicar no ícone (i). Ex: Prazo, revisões, formato de entrega." style="font-size: 14px; color: #999;"></span></th>
-                            <th style="width: 200px;">URL da Capa</th>
-                            <th style="width: 110px;">Preço (R$)</th>
-                            <th style="width: 80px;">Padrão</th>
+                            <th style="width: 170px;">URL da Capa</th>
+                            <th style="width: 95px;">Preço (R$)</th>
+                            <th style="width: 75px;">Padrão</th>
+                            <th style="width: 140px; text-align: center;">Ação / Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ( $servicos as $svc ) :
+                        <?php foreach ( $servicos as $idx => $svc ) :
                             $svc_id       = $svc['id'];
                             $preco_atual  = isset( $precos_salvos[ $svc_id ] ) ? $precos_salvos[ $svc_id ] : '';
                             $preco_padrao = isset( $precos_default[ $svc_id ] ) ? $precos_default[ $svc_id ] : 0;
@@ -1294,14 +1512,27 @@ function odyssee_produtos_admin_page() {
                             $desc_over    = isset( $override['descricao'] ) ? $override['descricao'] : '';
                             $thumb_over   = isset( $override['thumbnail'] ) ? $override['thumbnail'] : '';
                             $info_over    = isset( $override['informativo'] ) ? $override['informativo'] : '';
+                            $ordem_salva  = isset( $override['ordem'] ) && $override['ordem'] !== '' ? intval( $override['ordem'] ) : ($idx + 1);
+                            $is_oculto    = ! empty( $override['oculto'] );
                             $thumb_show   = ! empty( $thumb_over ) ? $thumb_over : $svc['thumbnail'];
                         ?>
-                        <tr>
+                        <tr class="service-row <?php echo $is_oculto ? 'row-oculto' : ''; ?>" style="<?php echo $is_oculto ? 'opacity: 0.45; background: #fff5f5;' : ''; ?>">
+                            <td style="vertical-align: middle; text-align: center;">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 2px;">
+                                    <button type="button" class="button button-small btn-move-up" title="Mover para cima" style="padding: 0 4px; line-height: 1.4; font-size: 10px;">▲</button>
+                                    <input type="number"
+                                           name="odyssee_servicos_overrides[<?php echo esc_attr( $svc_id ); ?>][ordem]"
+                                           value="<?php echo esc_attr( $ordem_salva ); ?>"
+                                           class="service-order-input"
+                                           style="width: 40px; text-align: center; font-size: 11px; padding: 2px;">
+                                    <button type="button" class="button button-small btn-move-down" title="Mover para baixo" style="padding: 0 4px; line-height: 1.4; font-size: 10px;">▼</button>
+                                </div>
+                            </td>
                             <td style="vertical-align: middle; text-align: center;">
                                 <?php if ( ! empty( $thumb_show ) ) : ?>
-                                    <img src="<?php echo esc_url( $thumb_show ); ?>" style="width: 50px; height: 34px; object-fit: cover; border-radius: 3px; border: 1px solid #ddd;" alt="">
+                                    <img src="<?php echo esc_url( $thumb_show ); ?>" style="width: 45px; height: 32px; object-fit: cover; border-radius: 3px; border: 1px solid #ddd;" alt="">
                                 <?php else : ?>
-                                    <span class="dashicons dashicons-format-image" style="font-size: 28px; color: #ccc;"></span>
+                                    <span class="dashicons dashicons-format-image" style="font-size: 26px; color: #ccc;"></span>
                                 <?php endif; ?>
                             </td>
                             <td>
@@ -1335,11 +1566,22 @@ function odyssee_produtos_admin_page() {
                                        name="odyssee_precos[<?php echo esc_attr( $svc_id ); ?>]"
                                        value="<?php echo esc_attr( $preco_atual ); ?>"
                                        step="0.01" min="0"
-                                       style="width: 100px;"
+                                       style="width: 90px;"
                                        placeholder="<?php echo esc_attr( number_format( $preco_padrao, 2, '.', '' ) ); ?>">
                             </td>
-                            <td style="color: #888; font-size: 11px;">
+                            <td style="color: #888; font-size: 11px; vertical-align: middle;">
                                 R$ <?php echo esc_html( number_format( $preco_padrao, 2, ',', '.' ) ); ?>
+                            </td>
+                            <td style="vertical-align: middle; text-align: center;">
+                                <input type="hidden"
+                                       name="odyssee_servicos_overrides[<?php echo esc_attr( $svc_id ); ?>][oculto]"
+                                       value="<?php echo $is_oculto ? '1' : '0'; ?>"
+                                       class="oculto-hidden-input">
+                                <button type="button"
+                                        class="button button-small btn-toggle-oculto"
+                                        style="<?php echo $is_oculto ? 'background: #dc3232; color: #fff; border-color: #b32d2d;' : 'background: #f6f7f7; color: #50575e;'; ?>">
+                                    <?php echo $is_oculto ? '🔴 Ocultado (Restaurar)' : '🗑️ Ocultar / Excluir'; ?>
+                                </button>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -1349,6 +1591,56 @@ function odyssee_produtos_admin_page() {
 
                 <?php submit_button( 'Salvar Alterações dos Serviços' ); ?>
             </form>
+        </div>
+
+        <script>
+        jQuery(document).ready(function($) {
+            // Mover linha para cima
+            $(document).on('click', '.btn-move-up', function(e) {
+                e.preventDefault();
+                var row = $(this).closest('tr');
+                var prevRow = row.prev('tr');
+                if (prevRow.length) {
+                    row.insertBefore(prevRow);
+                    reindexOrderInputs(row.closest('tbody'));
+                }
+            });
+
+            // Mover linha para baixo
+            $(document).on('click', '.btn-move-down', function(e) {
+                e.preventDefault();
+                var row = $(this).closest('tr');
+                var nextRow = row.next('tr');
+                if (nextRow.length) {
+                    row.insertAfter(nextRow);
+                    reindexOrderInputs(row.closest('tbody'));
+                }
+            });
+
+            // Alternar Oculto/Excluído
+            $(document).on('click', '.btn-toggle-oculto', function(e) {
+                e.preventDefault();
+                var btn = $(this);
+                var input = btn.siblings('.oculto-hidden-input');
+                var row = btn.closest('tr');
+                if (input.val() === '1') {
+                    input.val('0');
+                    btn.css({'background': '#f6f7f7', 'color': '#50575e', 'border-color': ''}).text('🗑️ Ocultar / Excluir');
+                    row.css({'opacity': '1', 'background': ''});
+                } else {
+                    input.val('1');
+                    btn.css({'background': '#dc3232', 'color': '#fff', 'border-color': '#b32d2d'}).text('🔴 Ocultado (Restaurar)');
+                    row.css({'opacity': '0.45', 'background': '#fff5f5'});
+                }
+            });
+
+            function reindexOrderInputs(tbody) {
+                tbody.find('tr').each(function(idx) {
+                    $(this).find('.service-order-input').val(idx + 1);
+                });
+            }
+        });
+        </script>
         </div>
 
         <hr style="margin: 30px 0;">

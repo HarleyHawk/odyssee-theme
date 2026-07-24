@@ -56,24 +56,39 @@
     <h4 class="onboarding-subtitle" data-key="subtitulo">mais que um portfólio, uma experiência web criativa</h4>
         <div class="step-wrapper">
             <div id="step-language" class="onboarding-step">
-                <p>Escolha um idioma de preferência</p>
-                <div class="button-group">
-                    <button id="lang-pt" data-lang="pt">PT-BR</button>
-                    <button id="lang-en" data-lang="en">EN-US</button>
+                <p data-key="escolha-idioma">Escolha um idioma de preferência</p>
+                <div class="button-group lang-button-group">
+                    <button id="lang-pt" data-lang="pt" class="lang-btn"><span class="flag-emoji">🇧🇷</span> <span>Português Brasileiro</span></button>
+                    <button id="lang-en" data-lang="en" class="lang-btn"><span class="flag-emoji">🇬🇧</span> <span>Inglês</span></button>
                 </div>
             </div>
             <div id="step-theme" class="onboarding-step">
-                <p>Escolha um tema para começar a navegar</p>
+                <p data-key="escolha-tema">Escolha um tema para começar a navegar</p>
                 <div class="theme-picker">
                     <button id="btn-light" aria-label="Tema claro"><svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79zM4 10.5H1v3h3zm9-9.95h-3v3.95h3zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79zM20 10.5v3h3v-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h3v-3.95h-3zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41z"/></svg></button>
                     <button id="btn-dark" aria-label="Tema escuro"><svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
                 </div>
-                <div class="color-picker">
-                    <button class="color-dot blue"></button>
-                    <button class="color-dot purple"></button>
-                    <button class="color-dot red"></button>
-                    <button class="color-dot yellow"></button>
-                    <button class="color-dot green"></button>
+                <div class="color-picker-grid">
+                    <button class="color-option-btn" data-color="blue">
+                        <span class="color-dot blue"></span>
+                        <span class="color-name" data-key="cor-azul">Azul</span>
+                    </button>
+                    <button class="color-option-btn" data-color="purple">
+                        <span class="color-dot purple"></span>
+                        <span class="color-name" data-key="cor-roxo">Roxo</span>
+                    </button>
+                    <button class="color-option-btn" data-color="red">
+                        <span class="color-dot red"></span>
+                        <span class="color-name" data-key="cor-vermelho">Vermelho</span>
+                    </button>
+                    <button class="color-option-btn" data-color="yellow">
+                        <span class="color-dot yellow"></span>
+                        <span class="color-name" data-key="cor-amarelo">Amarelo</span>
+                    </button>
+                    <button class="color-option-btn" data-color="green">
+                        <span class="color-dot green"></span>
+                        <span class="color-name" data-key="cor-verde">Verde</span>
+                    </button>
                 </div>
                 <p class="note">Você pode alterar isso depois nas <svg class="icon-svg small" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.11-.65l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.066 7.066 0 00-1.62-.94l-.36-2.54A.5.5 0 0013.4 2h-2.8a.5.5 0 00-.5.42l-.36 2.54c-.57.21-1.11.5-1.62.94L5.6 5.96a.5.5 0 00-.6.22L3.08 9.5a.5.5 0 00.11.65l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94L3.19 15.2a.5.5 0 00-.11.65l1.92 3.32c.14.24.44.34.68.22l2.39-.96c.5.44 1.05.8 1.62.94l.36 2.54c.05.28.28.48.5.48h2.8c.28 0 .46-.2.5-.48l.36-2.54c.57-.21 1.11-.5 1.62-.94l2.39.96c.24.12.54.02.68-.22l1.92-3.32a.5.5 0 00-.11-.65l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7z"/></svg> configurações.</p>
                 <button id="btn-continuar" data-key="continuar">Continuar &rarr;</button>

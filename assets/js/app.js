@@ -225,6 +225,16 @@ translations.pt['tema'] = 'Tema';
 translations.en['tema'] = 'Theme';
 translations.pt['cor-destaque'] = 'Cor de Destaque';
 translations.en['cor-destaque'] = 'Accent Color';
+translations.pt['cor-azul'] = 'Azul';
+translations.en['cor-azul'] = 'Blue';
+translations.pt['cor-roxo'] = 'Roxo';
+translations.en['cor-roxo'] = 'Purple';
+translations.pt['cor-vermelho'] = 'Vermelho';
+translations.en['cor-vermelho'] = 'Red';
+translations.pt['cor-amarelo'] = 'Amarelo';
+translations.en['cor-amarelo'] = 'Yellow';
+translations.pt['cor-verde'] = 'Verde';
+translations.en['cor-verde'] = 'Green';
 translations.pt['menu'] = 'Menu';
 translations.en['menu'] = 'Menu';
 translations.pt['continuar'] = 'Continuar →';
@@ -510,27 +520,32 @@ function extractYoutubeThumbnail(content) {
 // ==============================================
 async function fetchRealPosts() {
     try {
-        // Verifica cache local
-        const cacheKey = 'odyssee_posts_cache';
-        const cached = (window.safeStorage && window.safeStorage.getItem(cacheKey)) || null;
-        const cacheTime = (window.safeStorage && window.safeStorage.getItem(cacheKey + '_time')) || null;
-        const now = Date.now();
-
-        if (cached && cacheTime && (now - parseInt(cacheTime)) < wpConfig.cacheExpire) {
-            console.log('[CACHE] Posts recuperados do cache local');
-            allPosts = JSON.parse(cached);
-            return;
-        }
-
-        console.log('[API] Buscando posts de:', wpConfig.baseUrl + '/wp-json/wp/v2/posts');
+        console.log('[API] Buscando posts atualizados...');
 
         // Pega os posts do seu site utilizando a URL dinâmica fornecida pelo WordPress
         const restBaseUrl = (typeof odysseeSecure !== 'undefined' && odysseeSecure.restUrl)
             ? odysseeSecure.restUrl
             : wpConfig.baseUrl + '/wp-json/';
 
-        const url = restBaseUrl + 'wp/v2/posts?_embed&per_page=' + wpConfig.postsPerPage;
-        const response = await fetch(url);
+        // Adiciona timestamp (_t) para evitar cache estático do navegador ou da REST API
+        const timestamp = Date.now();
+        const url = restBaseUrl + 'wp/v2/posts?_embed&per_page=' + wpConfig.postsPerPage + '&_t=' + timestamp;
+        
+        let response;
+        try {
+            response = await fetch(url, { cache: 'no-cache' });
+        } catch (fetchErr) {
+            console.warn('[API] Falha de rede ao buscar posts. Tentando fallback local...', fetchErr);
+            // Fallback se estiver offline ou erro de rede
+            const cacheKey = 'odyssee_posts_cache';
+            const cached = (window.safeStorage && window.safeStorage.getItem(cacheKey)) || (typeof localStorage !== 'undefined' ? localStorage.getItem(cacheKey) : null);
+            if (cached) {
+                allPosts = JSON.parse(cached);
+                console.log('[CACHE] Posts carregados via fallback local offline');
+                return;
+            }
+            throw fetchErr;
+        }
 
         if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
 
@@ -672,6 +687,9 @@ async function fetchRealPosts() {
    ============================================== */
 const defaultPrices = {
     // Preços de Serviços Design Gráfico
+    'design_post': 20.00,
+    'design_storie': 22.00,
+    'design_carrossel': 60.00,
     'logotipologo': 49.00,
     'bannersocial': 79.00,
     'visualid': 599.00,
@@ -729,11 +747,11 @@ const defaultPrices = {
 // Preços unitários padrão (base para cálculo: economia = soma_unitários - preço_pacote)
 const defaultUnitPrices = {
     'design_post': 20.00,
-    'design_storie': 25.00,
-    'design_carrossel': 100.00,
-    'video_longo': 350.00,
-    'video_curto': 100.00,
-    'thumbnail': 20.00
+    'design_storie': 22.00,
+    'design_carrossel': 60.00,
+    'video_longo': 380.00,
+    'video_curto': 120.00,
+    'thumbnail': 30.00
 };
 
 // Mesclar preços do WordPress admin (se disponíveis) com os defaults
@@ -883,6 +901,9 @@ function renderCustomProducts() {
 
 // --- DESIGN GRÁFICO: Serviços individuais ---
 const designServices = [
+    { id: 'design_post', icon: 'fas fa-file-image', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.png', title: 'Post', desc: 'Arte individual para post em redes sociais (Instagram, Facebook, LinkedIn).' },
+    { id: 'design_storie', icon: 'fas fa-bolt', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.png', title: 'Storie', desc: 'Arte individual para stories em redes sociais (Instagram, WhatsApp).' },
+    { id: 'design_carrossel', icon: 'fas fa-images', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.png', title: 'Carrossel', desc: 'Arte para carrossel contínuo ou informativo para redes sociais.' },
     { id: 'logotipologo', icon: 'fas fa-id-card', image: 'https://odysseexp.com/wp-content/uploads/2025/09/Artboard-3-1-e1757565255458.png', title: 'Logotipo e Logo', desc: 'Uma logo única, criativa e estrategicamente feita para captar seu público alvo.' },
     { id: 'bannersocial', icon: 'fas fa-scroll', image: 'https://odysseexp.com/wp-content/uploads/2025/07/Screenshot-2025-06-30-184152.png', title: 'Banner para redes sociais', desc: 'Banner para YouTube, Facebook, site, etc.' },
     { id: 'cartao_visitas', icon: 'fas fa-palette', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services.png', title: 'Cartão de Visitas', desc: 'Design profissional para seu cartão de visitas.' },
@@ -953,13 +974,27 @@ const ilustracaoDigitalServices = [
 if (typeof odysseeOverrides !== 'undefined') {
     const allServiceArrays = [designServices, designPackages, videoServices, videoPackages, motionGraphicsServices, ilustracaoDigitalServices];
     allServiceArrays.forEach(function (arr) {
-        arr.forEach(function (svc) {
+        arr.forEach(function (svc, idx) {
             const override = odysseeOverrides[svc.id];
             if (override) {
                 if (override.nome) svc.title = override.nome;
                 if (override.descricao) svc.desc = override.descricao;
                 if (override.thumbnail) svc.image = override.thumbnail;
+                if (override.ordem !== undefined && override.ordem !== '') {
+                    svc.ordem = parseInt(override.ordem, 10);
+                } else {
+                    svc.ordem = idx + 1;
+                }
+                if (override.oculto === '1' || override.oculto === 1 || override.oculto === true) {
+                    svc.oculto = true;
+                }
+            } else {
+                svc.ordem = idx + 1;
             }
+        });
+        // Ordena pela posição definida no admin
+        arr.sort(function (a, b) {
+            return (a.ordem || 999) - (b.ordem || 999);
         });
     });
 }
@@ -974,12 +1009,12 @@ if (typeof odysseeOverrides !== 'undefined') {
 // Retorna HTML com o valor economizado ou string vazia se não houver desconto
 function calculateDiscount(packagePrice, unitQuantities) {
     let bruteTotal = 0;
-    bruteTotal += (unitQuantities.post || 0) * unitPrices.design_post;
-    bruteTotal += (unitQuantities.storie || 0) * unitPrices.design_storie;
-    bruteTotal += (unitQuantities.carrossel || 0) * unitPrices.design_carrossel;
-    bruteTotal += (unitQuantities.longo || 0) * unitPrices.video_longo;
-    bruteTotal += (unitQuantities.curto || 0) * unitPrices.video_curto;
-    bruteTotal += (unitQuantities.thumbnail || 0) * unitPrices.thumbnail;
+    bruteTotal += (unitQuantities.post || 0) * (allPrices.design_post || unitPrices.design_post || 20);
+    bruteTotal += (unitQuantities.storie || 0) * (allPrices.design_storie || unitPrices.design_storie || 22);
+    bruteTotal += (unitQuantities.carrossel || 0) * (allPrices.design_carrossel || unitPrices.design_carrossel || 100);
+    bruteTotal += (unitQuantities.longo || 0) * (allPrices.video_longo || unitPrices.video_longo || 380);
+    bruteTotal += (unitQuantities.curto || 0) * (allPrices.video_curto || unitPrices.video_curto || 120);
+    bruteTotal += (unitQuantities.thumbnail || 0) * (allPrices.thumbnail || unitPrices.thumbnail || 30);
     const discount = bruteTotal - packagePrice;
 
     // Retorna a string de economia formatada
@@ -1000,7 +1035,7 @@ function renderDesignServices() {
 
     if (servicesGrid) {
         servicesGrid.innerHTML = ''; // Limpa a grid
-        designServices.forEach(service => {
+        designServices.filter(s => !s.oculto).forEach(service => {
             const price = allPrices[service.id];
             const priceString = price ? `R$ ${price.toFixed(2).replace('.', ',')}` : (translations[currentLanguage] && translations[currentLanguage]['consulte'] ? translations[currentLanguage]['consulte'] : 'Consulte');
 
@@ -1033,7 +1068,7 @@ function renderDesignServices() {
 
     if (packagesGrid) {
         packagesGrid.innerHTML = ''; // Limpa a grid
-        designPackages.forEach(pkg => {
+        designPackages.filter(p => !p.oculto).forEach(pkg => {
             const price = allPrices[pkg.id];
             const priceString = price ? `R$ ${price.toFixed(2).replace('.', ',')}` : (translations[currentLanguage] && translations[currentLanguage]['consulte'] ? translations[currentLanguage]['consulte'] : 'Consulte');
             const discountHTML = calculateDiscount(price, pkg.quantities);
@@ -1068,7 +1103,7 @@ function renderVideoServices() {
 
     if (servicesGrid) {
         servicesGrid.innerHTML = ''; // Limpa a grid
-        videoServices.forEach(service => {
+        videoServices.filter(s => !s.oculto).forEach(service => {
             const price = allPrices[service.id];
             const priceString = price ? `R$ ${price.toFixed(2).replace('.', ',')}` : (translations[currentLanguage] && translations[currentLanguage]['consulte'] ? translations[currentLanguage]['consulte'] : 'Consulte');
 
@@ -1101,7 +1136,7 @@ function renderVideoServices() {
 
     if (packagesGrid) {
         packagesGrid.innerHTML = ''; // Limpa a grid
-        videoPackages.forEach(pkg => {
+        videoPackages.filter(p => !p.oculto).forEach(pkg => {
             const price = allPrices[pkg.id];
             const priceString = price ? `R$ ${price.toFixed(2).replace('.', ',')}` : (translations[currentLanguage] && translations[currentLanguage]['consulte'] ? translations[currentLanguage]['consulte'] : 'Consulte');
             const discountHTML = calculateDiscount(price, pkg.quantities);
@@ -1135,7 +1170,7 @@ function rendermotionGraphicsServices() {
 
     if (servicesGrid) {
         servicesGrid.innerHTML = ''; // Limpa a grid
-        motionGraphicsServices.forEach(service => {
+        motionGraphicsServices.filter(s => !s.oculto).forEach(service => {
             const price = allPrices[service.id];
             const priceString = price ? `R$ ${price.toFixed(2).replace('.', ',')}` : (translations[currentLanguage] && translations[currentLanguage]['consulte'] ? translations[currentLanguage]['consulte'] : 'Consulte');
 
@@ -1948,9 +1983,16 @@ document.querySelectorAll('#mobile-menu-overlay .mobile-menu-footer .btn-mobile-
 
 // Debug: report whether theme buttons contain SVGs
 console.debug('theme icons:', { setLightHasSVG: !!(setLight && setLight.querySelector('svg')), setDarkHasSVG: !!(setDark && setDark.querySelector('svg')) });
-colorDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-        const newColor = dot.classList[1];
+document.querySelectorAll('.color-dot, .color-option-btn').forEach(dot => {
+    dot.addEventListener('click', (e) => {
+        const target = e.currentTarget;
+        let newColor = target.dataset.color;
+        if (!newColor && target.querySelector('.color-dot')) {
+            const innerDot = target.querySelector('.color-dot');
+            newColor = innerDot.classList[1];
+        } else if (!newColor && target.classList.contains('color-dot')) {
+            newColor = target.classList[1];
+        }
         if (newColor) {
             body.classList.remove('color-blue', 'color-purple', 'color-red', 'color-yellow', 'color-green');
             body.classList.add(`color-${newColor}`);
