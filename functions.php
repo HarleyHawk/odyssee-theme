@@ -42,7 +42,7 @@ function odyssee_security_headers() {
     $is_localhost = isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false);
 
     // Content Security Policy base
-    $csp_policy = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://odysseexp.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';";
+    $csp_policy = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://www.googletagmanager.com https://www.instagram.com https://platform.instagram.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://odysseexp.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.instagram.com https://graph.instagram.com; frame-src 'self' https://www.instagram.com https://www.facebook.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';";
     
     if ( ! $is_localhost ) {
         $csp_policy .= " upgrade-insecure-requests;";
@@ -122,6 +122,32 @@ function odyssee_scripts() {
     wp_enqueue_style( 'odyssee-cookie-banner', get_template_directory_uri() . '/assets/css/cookie-banner.css', array(), $theme_version );
     wp_enqueue_script( 'odyssee-cookie-banner', get_template_directory_uri() . '/assets/js/cookie-banner.js', array(), $theme_version, true );
 }
+
+// ==============================================
+// EMBEDS DO INSTAGRAM: Injetar embed.js com nonce CSP
+// Necessário porque o script externo do Instagram não passa
+// pelo wp_script_attributes e seria bloqueado pela CSP
+// ==============================================
+add_action( 'wp_footer', function() {
+    // Verifica se é um post singular com conteúdo
+    if ( ! is_singular() ) return;
+
+    global $post;
+    if ( empty( $post->post_content ) ) return;
+
+    // Verifica se o conteúdo do post contém um embed do Instagram
+    $has_instagram = strpos( $post->post_content, 'instagram.com' ) !== false
+                  || strpos( $post->post_content, 'instagram-media' ) !== false
+                  || strpos( $post->post_content, 'wp-block-embed-instagram' ) !== false;
+
+    if ( ! $has_instagram ) return;
+
+    // Gera o nonce CSP para este script externo
+    $nonce = odyssee_generate_csp_nonce();
+
+    // Injeta o script do Instagram com o nonce para passar na CSP
+    echo '<script async nonce="' . esc_attr( $nonce ) . '" src="//www.instagram.com/embed.js"></script>' . "\n";
+}, 20 );
 
 // Hooks principais do tema
 add_action( 'wp_enqueue_scripts', 'odyssee_scripts' );
