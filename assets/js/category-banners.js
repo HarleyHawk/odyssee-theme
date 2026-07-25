@@ -13,28 +13,28 @@
      */
     const categoryBanners = {
         'design-grafico': {
-            'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_1.png',
-            'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_5.png',
-            'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_3.png',
-            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_2.png',
-            'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_4.png',
-            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_6.png',
-            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_7.png',
-            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_8.png',
-            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_9.png',
-            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_10.png'
+            'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_1.webp',
+            'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_5.webp',
+            'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_3.webp',
+            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_2.webp',
+            'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_4.webp',
+            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_6.webp',
+            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_7.webp',
+            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_8.webp',
+            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_9.webp',
+            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_10.webp'
         },
         'edicao-video': {
-            'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_11.png',
-            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_12.png',
-            'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_13.png',
-            'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_14.png',
-            'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_15.png',
-            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_16.png',
-            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_17.png',
-            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_18.png',
-            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_19.png',
-            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_20.png'
+            'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_11.webp',
+            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_12.webp',
+            'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_13.webp',
+            'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_14.webp',
+            'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_15.webp',
+            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_16.webp',
+            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_17.webp',
+            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_18.webp',
+            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_19.webp',
+            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_20.webp'
         },
         'motion': {
             'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/motiondarkred.gif',
@@ -49,28 +49,28 @@
             'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/motionlightblue.gif'
         },
         'ilustracao': {
-            'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_21.png',
-            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_22.png',
-            'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_23.png',
-            'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_24.png',
-            'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_25.png',
-            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_26.png',
-            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_27.png',
-            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_28.png',
-            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_29.png',
-            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_30.png'
+            'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_21.webp',
+            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_22.webp',
+            'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_23.webp',
+            'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_24.webp',
+            'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_25.webp',
+            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_26.webp',
+            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_27.webp',
+            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_28.webp',
+            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_29.webp',
+            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_30.webp'
         },
         'impressos': {
-            'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_31.png',
-            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_32.png',
-            'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_33.png',
-            'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_34.png',
-            'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_35.png',
-            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_36.png',
-            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_37.png',
-            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_38.png',
-            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_39.png',
-            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_40.png'
+            'theme-dark color-red': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_31.webp',
+            'theme-dark color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_32.webp',
+            'theme-dark color-green': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_33.webp',
+            'theme-dark color-purple': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_34.webp',
+            'theme-dark color-blue': 'https://odysseexp.com/wp-content/uploads/2025/12/banner-dg_35.webp',
+            'theme-light color-red': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_36.webp',
+            'theme-light color-yellow': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_37.webp',
+            'theme-light color-green': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_38.webp',
+            'theme-light color-purple': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_39.webp',
+            'theme-light color-blue': 'https://odysseexp.com/wp-content/uploads/2026/05/banner-dg_40.webp'
         }
     };
 

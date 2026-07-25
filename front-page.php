@@ -18,7 +18,7 @@
         <!-- Hero principal (slogan e seta) -->
         <section id="home" class="hero-section">
             <div class="hero-content-centered">
-                <img src="<?php echo esc_url( 'https://odysseexp.com/wp-content/uploads/2025/08/logo-colorful-reduced-scaled-e1756493913129.png' ); ?>" class="hero-symbol" alt="Símbolo">
+                <img src="<?php echo esc_url( 'https://odysseexp.com/wp-content/uploads/2025/08/logo-colorful-reduced-scaled-e1756493913129.webp' ); ?>" class="hero-symbol" alt="Símbolo">
                 <h1 class="hero-slogan" data-key="hero-slogan">Experience the Next Level of Creativity</h1>
                 <a href="#recentes" class="scroll-indicator"><i class="fas fa-chevron-down"></i></a>
             </div>

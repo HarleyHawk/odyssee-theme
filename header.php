@@ -52,7 +52,7 @@
 
     <!-- Overlay de onboarding (idioma/tema/cor) -->
     <div id="onboarding-container">
-    <img src='https://odysseexp.com/wp-content/uploads/2025/11/typewhite.png' alt="Odyssee Logo" class="onboarding-logo">
+    <img src='https://odysseexp.com/wp-content/uploads/2025/11/typewhite.webp' alt="Odyssee Logo" class="onboarding-logo">
     <h4 class="onboarding-subtitle" data-key="subtitulo">mais que um portfólio, uma experiência web criativa</h4>
         <div class="step-wrapper">
             <div id="step-language" class="onboarding-step">
@@ -102,7 +102,7 @@
         <header class="main-header transparent">
             <div class="header-left">
                 <a href="<?php echo esc_url( home_url() ); ?>" class="logo-link">
-                    <img src="<?php echo esc_url( 'https://odysseexp.com/wp-content/uploads/2025/11/typeblack.png' ); ?>" alt="Odyssee Hawk" class="header-logo" id="header-logotype">
+                    <img src="<?php echo esc_url( 'https://odysseexp.com/wp-content/uploads/2025/11/typeblack.webp' ); ?>" alt="Odyssee Hawk" class="header-logo" id="header-logotype">
                 </a>
                 <div class="header-mobile-buttons">
                     <a href="<?php echo esc_url( home_url( '/sobre-mim/' ) ); ?>" class="btn-header-about" aria-label="Sobre Mim">
@@ -179,12 +179,12 @@
             
             const logos = {
                 transparent: {
-                    light: 'https://odysseexp.com/wp-content/uploads/2025/11/typeblack.png',
-                    dark: 'https://odysseexp.com/wp-content/uploads/2025/11/typewhite.png'
+                    light: 'https://odysseexp.com/wp-content/uploads/2025/11/typeblack.webp',
+                    dark: 'https://odysseexp.com/wp-content/uploads/2025/11/typewhite.webp'
                 },
                 scrolled: {
-                    light: 'https://odysseexp.com/wp-content/uploads/2025/11/typecolorblack.png',
-                    dark: 'https://odysseexp.com/wp-content/uploads/2025/11/typecolorwhite.png'
+                    light: 'https://odysseexp.com/wp-content/uploads/2025/11/typecolorblack.webp',
+                    dark: 'https://odysseexp.com/wp-content/uploads/2025/11/typecolorwhite.webp'
                 }
             };
             

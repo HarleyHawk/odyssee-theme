@@ -12713,7 +12713,7 @@ namespace {
          * @var bool
          */
         public $options_graphic_bmp_ExtractData = \false;
-        /** graphic.png
+        /** graphic.webp
          * If data chunk is larger than this do not read it completely (getID3 only needs the first
          * few dozen bytes for parsing).
          *
@@ -16790,7 +16790,7 @@ namespace PHPMailer\PHPMailer {
          *                            the content when using an embedded image in HTML
          * @param string $name        A filename for the attachment. If this contains an extension,
          *                            PHPMailer will attempt to set a MIME type for the attachment.
-         *                            For example 'file.jpg' would get an 'image/jpeg' MIME type.
+         *                            For example 'file.webp' would get an 'image/jpeg' MIME type.
          * @param string $encoding    File encoding (see $Encoding), defaults to 'base64'
          * @param string $type        MIME type - will be used in preference to any automatically derived type
          * @param string $disposition Disposition to use
@@ -17004,8 +17004,8 @@ namespace PHPMailer\PHPMailer {
          * Automatically inlines images and creates a plain-text version by converting the HTML,
          * overwriting any existing values in Body and AltBody.
          * Do not source $message content from user input!
-         * $basedir is prepended when handling relative URLs, e.g. <img src="/images/a.png"> and must not be empty
-         * will look for an image file in $basedir/images/a.png and convert it to inline.
+         * $basedir is prepended when handling relative URLs, e.g. <img src="/images/a.webp"> and must not be empty
+         * will look for an image file in $basedir/images/a.webp and convert it to inline.
          * If you don't provide a $basedir, relative paths will be left untouched (and thus probably break in email)
          * Converts data-uri images into embedded attachments.
          * If you don't want to apply these transformations to your HTML, just set Body and AltBody directly.
@@ -53317,7 +53317,7 @@ namespace {
         /**
          * Returns the main screenshot file for the theme.
          *
-         * The main screenshot is called screenshot.png. gif and jpg extensions are also allowed.
+         * The main screenshot is called screenshot.webp. gif and jpg extensions are also allowed.
          *
          * Screenshots for a theme must be in the stylesheet directory. (In the case of child
          * themes, parent theme screenshots are not inherited.)
@@ -65033,7 +65033,7 @@ namespace {
          *
          *     // Correspondingly, something like this will appear in this array.
          *     $lexical_updates = array(
-         *         WP_HTML_Text_Replacement( 14, 28, 'https://my-site.my-domain/wp-content/uploads/2014/08/kittens.jpg' )
+         *         WP_HTML_Text_Replacement( 14, 28, 'https://my-site.my-domain/wp-content/uploads/2014/08/kittens.webp' )
          *     );
          *
          * @since 6.2.0
@@ -123439,7 +123439,7 @@ namespace {
      *     @type string $filesizeHumanReadable Filesize of the attachment in human readable format (e.g. 1 MB).
      *     @type int    $filesizeInBytes       Filesize of the attachment in bytes.
      *     @type int    $height                If the attachment is an image, represents the height of the image in pixels.
-     *     @type string $icon                  Icon URL of the attachment (e.g. /wp-includes/images/media/archive.png).
+     *     @type string $icon                  Icon URL of the attachment (e.g. /wp-includes/images/media/archive.webp).
      *     @type int    $id                    ID of the attachment.
      *     @type string $link                  URL to the attachment.
      *     @type int    $menuOrder             Menu order of the attachment post.
@@ -133425,10 +133425,10 @@ namespace {
      * @since 6.5.0 Added the `$preferred_ext` parameter.
      *
      * @param string|int $mime          MIME type or attachment ID.
-     * @param string     $preferred_ext File format to prefer in return. Default '.png'.
+     * @param string     $preferred_ext File format to prefer in return. Default '.webp'.
      * @return string|false Icon, false otherwise.
      */
-    function wp_mime_type_icon($mime = 0, $preferred_ext = '.png')
+    function wp_mime_type_icon($mime = 0, $preferred_ext = '.webp')
     {
     }
     /**

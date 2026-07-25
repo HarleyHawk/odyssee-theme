@@ -458,7 +458,15 @@ function getPackageItems(id) {
     return (packageTranslations[id] && packageTranslations[id][currentLanguage] && packageTranslations[id][currentLanguage].items) || [];
 }
 
-let allPosts = []; // Cache local dos posts (preenchido via API REST do WP)
+let allPosts = (typeof odysseeInitialPosts !== 'undefined' && Array.isArray(odysseeInitialPosts) && odysseeInitialPosts.length > 0)
+    ? odysseeInitialPosts
+    : (function () {
+        try {
+            const cacheKey = 'odyssee_posts_cache';
+            const cached = (window.safeStorage && window.safeStorage.getItem(cacheKey)) || (typeof localStorage !== 'undefined' ? localStorage.getItem(cacheKey) : null);
+            return cached ? JSON.parse(cached) : [];
+        } catch (e) { return []; }
+    })(); // Cache local dos posts (preenchido via PHP ou API REST do WP)
 
 // ==============================================
 // CONFIGURAÇÃO DO WORDPRESS
@@ -498,7 +506,7 @@ function extractYoutubeThumbnail(content) {
 
     if (match && match[1]) {
         console.log('[YOUTUBE] ID extraído de iframe:', match[1]);
-        return `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`;
+        return `https://img.youtube.com/vi/${match[1]}/maxresdefault.webp`;
     }
 
     // 2. Procura em URLs diretas do YouTube
@@ -507,7 +515,7 @@ function extractYoutubeThumbnail(content) {
 
     if (match && match[1]) {
         console.log('[YOUTUBE] ID extraído de URL:', match[1]);
-        return `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`;
+        return `https://img.youtube.com/vi/${match[1]}/maxresdefault.webp`;
     }
 
     return null;
@@ -527,13 +535,12 @@ async function fetchRealPosts() {
             ? odysseeSecure.restUrl
             : wpConfig.baseUrl + '/wp-json/';
 
-        // Adiciona timestamp (_t) para evitar cache estático do navegador ou da REST API
-        const timestamp = Date.now();
-        const url = restBaseUrl + 'wp/v2/posts?_embed&per_page=' + wpConfig.postsPerPage + '&_t=' + timestamp;
+        // Usa cache HTTP normal sem forçar recarregamento completo a cada frame
+        const url = restBaseUrl + 'wp/v2/posts?_embed&per_page=' + wpConfig.postsPerPage;
         
         let response;
         try {
-            response = await fetch(url, { cache: 'no-cache' });
+            response = await fetch(url);
         } catch (fetchErr) {
             console.warn('[API] Falha de rede ao buscar posts. Tentando fallback local...', fetchErr);
             // Fallback se estiver offline ou erro de rede
@@ -663,12 +670,7 @@ async function fetchRealPosts() {
         } catch (e) { /* ignore */ }
 
         // Renderiza os carrosseis com os posts
-        renderCarousel('carousel-recentes', null);
-        renderCarousel('carousel-design-grafico', 'design-grafico');
-        renderCarousel('carousel-edicao-video', 'edicao-de-video');
-        renderCarousel('carousel-motion', 'motion');
-        renderCarousel('carousel-ilustracao', 'ilustracao-digital');
-        renderCarousel('carousel-impressos', 'impressos');
+        renderAllCarousels();
 
         // E renderiza o blog (se estiver na página de posts)
         if (typeof renderBlog === 'function') renderBlog();
@@ -901,18 +903,18 @@ function renderCustomProducts() {
 
 // --- DESIGN GRÁFICO: Serviços individuais ---
 const designServices = [
-    { id: 'design_post', icon: 'fas fa-file-image', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.png', title: 'Post', desc: 'Arte individual para post em redes sociais (Instagram, Facebook, LinkedIn).' },
-    { id: 'design_storie', icon: 'fas fa-bolt', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.png', title: 'Storie', desc: 'Arte individual para stories em redes sociais (Instagram, WhatsApp).' },
-    { id: 'design_carrossel', icon: 'fas fa-images', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.png', title: 'Carrossel', desc: 'Arte para carrossel contínuo ou informativo para redes sociais.' },
-    { id: 'logotipologo', icon: 'fas fa-id-card', image: 'https://odysseexp.com/wp-content/uploads/2025/09/Artboard-3-1-e1757565255458.png', title: 'Logotipo e Logo', desc: 'Uma logo única, criativa e estrategicamente feita para captar seu público alvo.' },
-    { id: 'bannersocial', icon: 'fas fa-scroll', image: 'https://odysseexp.com/wp-content/uploads/2025/07/Screenshot-2025-06-30-184152.png', title: 'Banner para redes sociais', desc: 'Banner para YouTube, Facebook, site, etc.' },
-    { id: 'cartao_visitas', icon: 'fas fa-palette', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services.png', title: 'Cartão de Visitas', desc: 'Design profissional para seu cartão de visitas.' },
-    { id: 'flyer', icon: 'fas fa-newspaper', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-2.png', title: 'Flyer', desc: 'Arte criativa para seu flyer promocional.' },
-    { id: 'convites', icon: 'fas fa-envelope-open-text', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-5.png', title: 'Convites', desc: 'Design elegante para seus convites.' },
-    { id: 'banner', icon: 'fas fa-scroll', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-4.png', title: 'Banner', desc: 'Arte para banners de qualquer tamanho (impresso).' },
-    { id: 'botton', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-1.png', title: 'Arte para Botton', desc: 'Arte simples para botton personalizado.' },
-    { id: 'adesivos', icon: 'fas fa-sticky-note', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-3.png', title: 'Arte para Adesivos', desc: 'Design para adesivos personalizados.' },
-    { id: 'visualid', icon: 'fas fa-palette', image: 'https://odysseexp.com/wp-content/uploads/2025/05/Untitled-1-11.jpg', title: 'Identidade Visual', desc: 'Manual de identidade completa, mockups, brindes e mais!' },
+    { id: 'design_post', icon: 'fas fa-file-image', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.webp', title: 'Post', desc: 'Arte individual para post em redes sociais (Instagram, Facebook, LinkedIn).' },
+    { id: 'design_storie', icon: 'fas fa-bolt', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.webp', title: 'Storie', desc: 'Arte individual para stories em redes sociais (Instagram, WhatsApp).' },
+    { id: 'design_carrossel', icon: 'fas fa-images', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.webp', title: 'Carrossel', desc: 'Arte para carrossel contínuo ou informativo para redes sociais.' },
+    { id: 'logotipologo', icon: 'fas fa-id-card', image: 'https://odysseexp.com/wp-content/uploads/2025/09/Artboard-3-1-e1757565255458.webp', title: 'Logotipo e Logo', desc: 'Uma logo única, criativa e estrategicamente feita para captar seu público alvo.' },
+    { id: 'bannersocial', icon: 'fas fa-scroll', image: 'https://odysseexp.com/wp-content/uploads/2025/07/Screenshot-2025-06-30-184152.webp', title: 'Banner para redes sociais', desc: 'Banner para YouTube, Facebook, site, etc.' },
+    { id: 'cartao_visitas', icon: 'fas fa-palette', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services.webp', title: 'Cartão de Visitas', desc: 'Design profissional para seu cartão de visitas.' },
+    { id: 'flyer', icon: 'fas fa-newspaper', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-2.webp', title: 'Flyer', desc: 'Arte criativa para seu flyer promocional.' },
+    { id: 'convites', icon: 'fas fa-envelope-open-text', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-5.webp', title: 'Convites', desc: 'Design elegante para seus convites.' },
+    { id: 'banner', icon: 'fas fa-scroll', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-4.webp', title: 'Banner', desc: 'Arte para banners de qualquer tamanho (impresso).' },
+    { id: 'botton', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-1.webp', title: 'Arte para Botton', desc: 'Arte simples para botton personalizado.' },
+    { id: 'adesivos', icon: 'fas fa-sticky-note', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-3.webp', title: 'Arte para Adesivos', desc: 'Design para adesivos personalizados.' },
+    { id: 'visualid', icon: 'fas fa-palette', image: 'https://odysseexp.com/wp-content/uploads/2025/05/Untitled-1-11.webp', title: 'Identidade Visual', desc: 'Manual de identidade completa, mockups, brindes e mais!' },
 ];
 
 // Pacotes de Design (items = lista exibida, quantities = base para cálculo de desconto)
@@ -926,9 +928,9 @@ const designPackages = [
 
 // --- EDIÇÃO DE VÍDEO: Serviços individuais ---
 const videoServices = [
-    { id: 'video_longo', icon: 'fas fa-film', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.png', title: 'Vídeo Longo', desc: 'Um vídeo longo, perfeito para YouTube e outras plataformas.' },
-    { id: 'video_curto', icon: 'fas fa-mobile-alt', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.png', title: 'Vídeo Curto', desc: 'Um vídeo curto, ideal para redes sociais verticais e anúncios.' },
-    { id: 'thumbnail', icon: 'fas fa-image', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.png', title: 'Thumbnail', desc: 'Thumbnail personalizada para seu vídeo.' },
+    { id: 'video_longo', icon: 'fas fa-film', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.webp', title: 'Vídeo Longo', desc: 'Um vídeo longo, perfeito para YouTube e outras plataformas.' },
+    { id: 'video_curto', icon: 'fas fa-mobile-alt', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.webp', title: 'Vídeo Curto', desc: 'Um vídeo curto, ideal para redes sociais verticais e anúncios.' },
+    { id: 'thumbnail', icon: 'fas fa-image', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.webp', title: 'Thumbnail', desc: 'Thumbnail personalizada para seu vídeo.' },
 ];
 // Pacotes de Vídeo
 const videoPackages = [
@@ -945,24 +947,24 @@ const videoPackages = [
 const motionGraphicsServices = [
     { id: 'intro_animada', icon: 'fas fa-play-circle fa-bounce', image: 'https://odysseexp.com/wp-content/uploads/2026/01/FalaAiWillcomsom-ezgif.com-optimize.gif', title: 'Intro Animada', desc: 'Uma intro simples e criativa com elementos 2D' },
     { id: 'artmotion', icon: 'fas fa-scroll', image: 'https://odysseexp.com/wp-content/uploads/2025/06/harley-animated-.gif', title: 'Arte Animada', desc: 'Sua arte animada com elementos 2D' },
-    { id: 'logomotion', icon: 'fas fa-scroll', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', title: 'Logo/logotipo Animado', desc: 'Logo animado para vídeos e apresentações' },
-    { id: 'motionmoldura', icon: 'fas fa-expand fa-fade', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', title: 'Moldura Animada', desc: 'Moldura animada para vídeos e transmissões ao vivo' },
-    { id: 'waitscreen', icon: 'fas fa-spinner fa-spin', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', title: 'Tela de Espera', desc: 'Animação em looping para telas de espera' },
-    { id: 'motionbanner', icon: 'fas fa-newspaper', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', title: 'Banner animado', desc: 'O banner da sua marca animado para chamar atenção' },
+    { id: 'logomotion', icon: 'fas fa-scroll', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', title: 'Logo/logotipo Animado', desc: 'Logo animado para vídeos e apresentações' },
+    { id: 'motionmoldura', icon: 'fas fa-expand fa-fade', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', title: 'Moldura Animada', desc: 'Moldura animada para vídeos e transmissões ao vivo' },
+    { id: 'waitscreen', icon: 'fas fa-spinner fa-spin', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', title: 'Tela de Espera', desc: 'Animação em looping para telas de espera' },
+    { id: 'motionbanner', icon: 'fas fa-newspaper', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', title: 'Banner animado', desc: 'O banner da sua marca animado para chamar atenção' },
 ];
 
 // --- ILUSTRAÇÃO DIGITAL: Estilos de arte disponíveis ---
 const ilustracaoDigitalServices = [
-    { id: 'fanart_anime', icon: 'fas fa-female', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_14.png', title: 'Arte Estilo Anime', desc: 'Arte digital de personagem no estilo anime personalizada para você' },
-    { id: 'fanart_cartoon', icon: 'fas fa-walking', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_13.png', title: 'Arte Estilo Cartoon', desc: 'Arte digital de personagem no estilo cartoon personalizada para você' },
-    { id: 'fanart_chibi', icon: 'fab fa-github-alt', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_15.png', title: 'Arte Estilo Chibi', desc: 'Arte digital de personagem no estilo chibi personalizada para você' },
-    { id: 'fanart_pixelart', icon: 'fas fa-pixel', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_12.png', title: 'Arte Estilo Pixel Art', desc: 'Arte digital de personagem no estilo pixel art personalizada para você' },
-    { id: 'fanart_vetorial', icon: 'fas fa-vector-square', image: 'https://odysseexp.com/wp-content/uploads/2025/05/Jinx-Powder-Vector-lightroom-scaled-e1747298364610.jpg', title: 'Arte Estilo Vetorial', desc: 'Arte digital de personagem no estilo vetorial personalizada para você' },
-    { id: 'personagem_rpg', icon: 'fas fa-dice-d20', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', title: 'Personagem token RPG', desc: 'Arte de personagem para RPG no estilo token de tabuleiro.' },
-    { id: 'ilustracao_perfil', icon: 'fas fa-id-badge', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_11.png', title: 'Ilustração de perfil/busto', desc: 'Arte digital de perfil nos estilos cartoon, anime, chibi e pixel art' },
-    { id: 'ilustracao_corpo_inteiro', icon: 'fas fa-user', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_8.png', title: 'Ilustração corpo inteiro', desc: 'Arte digital de corpo inteiro nos estilos cartoon, anime, chibi e pixel art' },
-    { id: 'esboco_rapido', icon: '\tfar fa-id-badge', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_10.png', title: 'Esboço Rápido', desc: 'Um esboço rápido e simples de sua ideia ou personagem' },
-    { id: 'storyboard', icon: 'fas fa-landmark', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_9.png', title: 'Storyboard', desc: 'Storyboard cena a cena para seu projeto' },
+    { id: 'fanart_anime', icon: 'fas fa-female', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_14.webp', title: 'Arte Estilo Anime', desc: 'Arte digital de personagem no estilo anime personalizada para você' },
+    { id: 'fanart_cartoon', icon: 'fas fa-walking', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_13.webp', title: 'Arte Estilo Cartoon', desc: 'Arte digital de personagem no estilo cartoon personalizada para você' },
+    { id: 'fanart_chibi', icon: 'fab fa-github-alt', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_15.webp', title: 'Arte Estilo Chibi', desc: 'Arte digital de personagem no estilo chibi personalizada para você' },
+    { id: 'fanart_pixelart', icon: 'fas fa-pixel', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_12.webp', title: 'Arte Estilo Pixel Art', desc: 'Arte digital de personagem no estilo pixel art personalizada para você' },
+    { id: 'fanart_vetorial', icon: 'fas fa-vector-square', image: 'https://odysseexp.com/wp-content/uploads/2025/05/Jinx-Powder-Vector-lightroom-scaled-e1747298364610.webp', title: 'Arte Estilo Vetorial', desc: 'Arte digital de personagem no estilo vetorial personalizada para você' },
+    { id: 'personagem_rpg', icon: 'fas fa-dice-d20', image: 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', title: 'Personagem token RPG', desc: 'Arte de personagem para RPG no estilo token de tabuleiro.' },
+    { id: 'ilustracao_perfil', icon: 'fas fa-id-badge', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_11.webp', title: 'Ilustração de perfil/busto', desc: 'Arte digital de perfil nos estilos cartoon, anime, chibi e pixel art' },
+    { id: 'ilustracao_corpo_inteiro', icon: 'fas fa-user', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_8.webp', title: 'Ilustração corpo inteiro', desc: 'Arte digital de corpo inteiro nos estilos cartoon, anime, chibi e pixel art' },
+    { id: 'esboco_rapido', icon: '\tfar fa-id-badge', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_10.webp', title: 'Esboço Rápido', desc: 'Um esboço rápido e simples de sua ideia ou personagem' },
+    { id: 'storyboard', icon: 'fas fa-landmark', image: 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_9.webp', title: 'Storyboard', desc: 'Storyboard cena a cena para seu projeto' },
 ];
 
 // ==============================================
@@ -1316,7 +1318,7 @@ function renderilustracaoConfigurador() {
                         } else {
                             title = 'Arte Animada';
                             desc = 'Adiciona animação à sua ilustração (tipo motion)';
-                            image = 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png';
+                            image = 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp';
                         }
                     } else {
                         title = serviceData.title;
@@ -1666,9 +1668,9 @@ function createCard(post) {
     card.className = 'carousel-card';
     let isDragging = false;
 
-    // DRAGGABLE FALSE É CRUCIAL
+    // DRAGGABLE FALSE É CRUCIAL; decoding async evita travar a thread principal
     card.innerHTML = `
-        <img src="${escapeHtml(post.image)}" class="carousel-img" alt="${escapeHtml(post.title)}" draggable="false" loading="lazy">
+        <img src="${escapeHtml(post.image)}" class="carousel-img" alt="${escapeHtml(post.title)}" draggable="false" loading="lazy" decoding="async">
         <div class="carousel-info">
             <h4 class="carousel-title">${escapeHtml(post.title)}</h4>
             <span class="carousel-date">${new Date(post.date).toLocaleDateString(currentLanguage === 'en' ? 'en-US' : 'pt-BR')}</span>
@@ -1699,6 +1701,28 @@ function createCard(post) {
 
     card.style.cursor = 'pointer';
     return card;
+}
+
+// ==============================================
+// CARROSSEL: Renderiza todos os carrosséis da Home
+// ==============================================
+function renderAllCarousels() {
+    const carousels = [
+        ['carousel-recentes', null],
+        ['carousel-design-grafico', 'design-grafico'],
+        ['carousel-edicao-video', 'edicao-de-video'],
+        ['carousel-motion', 'motion'],
+        ['carousel-ilustracao', 'ilustracao-digital'],
+        ['carousel-impressos', 'impressos']
+    ];
+
+    carousels.forEach(([id, filterCat]) => {
+        const container = document.getElementById(id);
+        if (container) {
+            container.innerHTML = '';
+            renderCarousel(id, filterCat);
+        }
+    });
 }
 
 // ==============================================
@@ -1810,29 +1834,14 @@ function renderCarousel(containerId, filterCategory = null) {
         animationId = requestAnimationFrame(animate);
     }
 
-    // Aguarda imagens para estabilizar larguras antes de iniciar a animação
-    waitForTrackImages(1500).then(() => {
-        // Força recálculo e posicionamento inicial baseado no tamanho real
-        const totalWidth = track.scrollWidth;
-        let singleSetWidth = totalWidth / 3;
-        try {
-            const children = track.children;
-            const baseLen = basePosts.length;
-            if (children.length >= baseLen * 2) {
-                const startB = children[baseLen];
-                const startC = children[baseLen * 2];
-                const rectB = startB.getBoundingClientRect();
-                const rectC = startC.getBoundingClientRect();
-                singleSetWidth = Math.round(rectC.left - rectB.left);
-            }
-        } catch (e) { }
-
-        if (totalWidth > 0 && singleSetWidth > 0) {
-            position = -singleSetWidth;
-            initialized = true;
-        }
-        requestAnimationFrame(animate);
-    });
+    // Inicia a animação imediatamente (0ms de atraso) para fluidez instantânea
+    const totalWidth = track.scrollWidth;
+    let initialSingleWidth = totalWidth / 3;
+    if (totalWidth > 0 && initialSingleWidth > 0) {
+        position = -initialSingleWidth;
+        initialized = true;
+    }
+    requestAnimationFrame(animate);
 
     // --- EVENTOS DE MOUSE E TOUCH (SISTEMA SIMPLIFICADO) ---
 
@@ -2312,20 +2321,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==============================================
-   INICIALIZAÇÃO: Window Load
-   Busca posts da API REST e renderiza carrosséis,
-   blog e tags. Suporta pré-filtro via ?categoria=
+   INICIALIZAÇÃO INSTANTÂNEA (DOMContentLoaded & LOAD)
+   Renderiza carrosséis e blog em 0ms usando dados pré-carregados
    ============================================== */
-window.addEventListener('load', () => {
-    console.log('[INIT] Página carregada, buscando posts...');
-    fetchRealPosts().then(() => {
-        renderTagPills();
+function initUI() {
+    if (!allPosts || allPosts.length === 0) return;
 
-        // Verifica se há parâmetro ?categoria= na URL para pré-filtrar
+    try { renderAllCarousels(); } catch (e) { console.error('[UI] Carousel error:', e); }
+    try { renderTagPills(); } catch (e) { }
+
+    try {
         const urlParams = new URLSearchParams(window.location.search);
         const categoriaParam = urlParams.get('categoria');
         if (categoriaParam) {
-            // Ativa visualmente a tag-pill correspondente
             document.querySelectorAll('.tag-pill').forEach(pill => {
                 if (pill.dataset.tag === categoriaParam) {
                     pill.style.backgroundColor = 'var(--color-accent)';
@@ -2336,5 +2344,23 @@ window.addEventListener('load', () => {
         } else {
             renderBlog();
         }
+    } catch (e) { }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('[INIT] DOM pronto. Inicializando UI...');
+    initUI();
+
+    // Busca atualizações em segundo plano sem bloquear a renderização inicial
+    fetchRealPosts().then(() => {
+        initUI();
+    }).catch(err => {
+        console.warn('[INIT] Atualização em segundo plano:', err);
     });
+
+    try { detectFontAwesomeAndEnableSvgFallback(); } catch(e){}
+});
+
+window.addEventListener('load', () => {
+    initUI();
 });

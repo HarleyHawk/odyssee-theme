@@ -5,16 +5,16 @@
 
 // Mapeamento de imagens por tema (light/dark) e cor
 const profileImages = {
-    'light-blue': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-the-sky.png',
-    'light-purple': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-purpur.png',
-    'light-red': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-crimson.png',
-    'light-yellow': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-oak.png',
-    'light-green': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-greenfroglight.png',
-    'dark-blue': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-nightsky.png',
-    'dark-purple': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-netherportal.png',
-    'dark-red': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-redstone.png',
-    'dark-yellow': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-honeycomb.png',
-    'dark-green': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-grass-alpha.png'
+    'light-blue': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-the-sky.webp',
+    'light-purple': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-purpur.webp',
+    'light-red': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-crimson.webp',
+    'light-yellow': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-oak.webp',
+    'light-green': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-greenfroglight.webp',
+    'dark-blue': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-nightsky.webp',
+    'dark-purple': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-netherportal.webp',
+    'dark-red': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-redstone.webp',
+    'dark-yellow': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-honeycomb.webp',
+    'dark-green': 'https://odysseexp.com/wp-content/uploads/2025/11/harley-grass-alpha.webp'
 };
 
 /**

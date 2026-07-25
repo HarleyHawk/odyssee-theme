@@ -111,6 +111,9 @@ function odyssee_scripts() {
     if ( ! empty( $overrides ) && is_array( $overrides ) ) {
         wp_localize_script( 'odyssee-app', 'odysseeOverrides', $overrides );
     }
+
+    // Passar posts iniciais do servidor para carregamento e renderização instantânea (0ms de espera)
+    wp_localize_script( 'odyssee-app', 'odysseeInitialPosts', odyssee_get_initial_posts() );
     
     // Script para placeholders da página principal
     wp_enqueue_script( 'odyssee-placeholders', get_template_directory_uri() . '/assets/js/placeholders.js', array(), $theme_version, true );
@@ -183,7 +186,7 @@ add_theme_support( 'post-thumbnails' );
 // ==============================================
 function odyssee_seo_meta_tags() {
     $site_name   = 'Odyssee — Creative Experience';
-    $default_img = 'https://odysseexp.com/wp-content/uploads/2025/08/logo-colorful-reduced-scaled-e1756493913129.png';
+    $default_img = 'https://odysseexp.com/wp-content/uploads/2025/08/logo-colorful-reduced-scaled-e1756493913129.webp';
     $site_url    = home_url();
     $locale      = 'pt_BR';
 
@@ -315,7 +318,7 @@ function odyssee_jsonld_schema() {
         '@type'    => 'ProfessionalService',
         'name'     => 'Odyssee — Creative Experience',
         'url'      => $site_url,
-        'logo'     => 'https://odysseexp.com/wp-content/uploads/2025/08/logo-colorful-reduced-scaled-e1756493913129.png',
+        'logo'     => 'https://odysseexp.com/wp-content/uploads/2025/08/logo-colorful-reduced-scaled-e1756493913129.webp',
         'description' => 'Serviços profissionais de Design Gráfico, Edição de Vídeo, Motion Graphics e Ilustração Digital.',
         'founder'  => array(
             '@type' => 'Person',
@@ -352,7 +355,7 @@ function odyssee_jsonld_schema() {
                 'name'  => 'Odyssee — Creative Experience',
                 'logo'  => array(
                     '@type' => 'ImageObject',
-                    'url'   => 'https://odysseexp.com/wp-content/uploads/2025/08/logo-colorful-reduced-scaled-e1756493913129.png',
+                    'url'   => 'https://odysseexp.com/wp-content/uploads/2025/08/logo-colorful-reduced-scaled-e1756493913129.webp',
                 ),
             ),
             'mainEntityOfPage' => get_permalink(),
@@ -1437,18 +1440,18 @@ function odyssee_produtos_admin_page() {
     // Esses dados são usados como placeholder nos campos de edição da tabela admin
     $servicos_existentes = array(
         'design-grafico' => array(
-            array( 'id' => 'design_post',          'nome' => 'Post',                           'descricao' => 'Arte individual para post em redes sociais (Instagram, Facebook, LinkedIn).', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.png', 'tipo' => 'servico' ),
-            array( 'id' => 'design_storie',        'nome' => 'Storie',                         'descricao' => 'Arte individual para stories em redes sociais (Instagram, WhatsApp).', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.png', 'tipo' => 'servico' ),
-            array( 'id' => 'design_carrossel',     'nome' => 'Carrossel',                      'descricao' => 'Arte para carrossel contínuo ou informativo para redes sociais.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.png', 'tipo' => 'servico' ),
-            array( 'id' => 'logotipologo',         'nome' => 'Logotipo e Logo',               'descricao' => 'Uma logo única, criativa e estrategicamente feita para captar seu público alvo.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/09/Artboard-3-1-e1757565255458.png', 'tipo' => 'servico' ),
-            array( 'id' => 'bannersocial',         'nome' => 'Banner para redes sociais',      'descricao' => 'Banner para YouTube, Facebook, site, etc.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/07/Screenshot-2025-06-30-184152.png', 'tipo' => 'servico' ),
-            array( 'id' => 'cartao_visitas',       'nome' => 'Cartão de Visitas',              'descricao' => 'Design profissional para seu cartão de visitas.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services.png', 'tipo' => 'servico' ),
-            array( 'id' => 'flyer',                'nome' => 'Flyer',                           'descricao' => 'Arte criativa para seu flyer promocional.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-2.png', 'tipo' => 'servico' ),
-            array( 'id' => 'convites',             'nome' => 'Convites',                        'descricao' => 'Design elegante para seus convites.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-5.png', 'tipo' => 'servico' ),
-            array( 'id' => 'banner',               'nome' => 'Banner (impresso)',               'descricao' => 'Arte para banners de qualquer tamanho.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-4.png', 'tipo' => 'servico' ),
-            array( 'id' => 'botton',               'nome' => 'Arte para Botton',                'descricao' => 'Arte simples para botton personalizado.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-1.png', 'tipo' => 'servico' ),
-            array( 'id' => 'adesivos',             'nome' => 'Arte para Adesivos',              'descricao' => 'Design para adesivos personalizados.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-3.png', 'tipo' => 'servico' ),
-            array( 'id' => 'visualid',             'nome' => 'Identidade Visual',               'descricao' => 'Manual de identidade completa, mockups, brindes e mais!', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/05/Untitled-1-11.jpg', 'tipo' => 'servico' ),
+            array( 'id' => 'design_post',          'nome' => 'Post',                           'descricao' => 'Arte individual para post em redes sociais (Instagram, Facebook, LinkedIn).', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'design_storie',        'nome' => 'Storie',                         'descricao' => 'Arte individual para stories em redes sociais (Instagram, WhatsApp).', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'design_carrossel',     'nome' => 'Carrossel',                      'descricao' => 'Arte para carrossel contínuo ou informativo para redes sociais.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'logotipologo',         'nome' => 'Logotipo e Logo',               'descricao' => 'Uma logo única, criativa e estrategicamente feita para captar seu público alvo.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/09/Artboard-3-1-e1757565255458.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'bannersocial',         'nome' => 'Banner para redes sociais',      'descricao' => 'Banner para YouTube, Facebook, site, etc.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/07/Screenshot-2025-06-30-184152.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'cartao_visitas',       'nome' => 'Cartão de Visitas',              'descricao' => 'Design profissional para seu cartão de visitas.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'flyer',                'nome' => 'Flyer',                           'descricao' => 'Arte criativa para seu flyer promocional.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-2.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'convites',             'nome' => 'Convites',                        'descricao' => 'Design elegante para seus convites.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-5.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'banner',               'nome' => 'Banner (impresso)',               'descricao' => 'Arte para banners de qualquer tamanho.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-4.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'botton',               'nome' => 'Arte para Botton',                'descricao' => 'Arte simples para botton personalizado.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-1.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'adesivos',             'nome' => 'Arte para Adesivos',              'descricao' => 'Design para adesivos personalizados.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-3.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'visualid',             'nome' => 'Identidade Visual',               'descricao' => 'Manual de identidade completa, mockups, brindes e mais!', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/05/Untitled-1-11.webp', 'tipo' => 'servico' ),
             array( 'id' => 'designmegapackage',    'nome' => 'Mega Pacote Design',        'descricao' => '10 posts + 10 stories + 10 carrosséis', 'thumbnail' => '', 'tipo' => 'pacote' ),
             array( 'id' => 'designpremiumpackage', 'nome' => 'Pacote Premium Design',     'descricao' => '5 posts + 5 stories + 5 carrosséis', 'thumbnail' => '', 'tipo' => 'pacote' ),
             array( 'id' => 'postpackage',          'nome' => 'Pacote Posts',               'descricao' => '5 posts', 'thumbnail' => '', 'tipo' => 'pacote' ),
@@ -1456,9 +1459,9 @@ function odyssee_produtos_admin_page() {
             array( 'id' => 'carrosselpackage',     'nome' => 'Pacote Carrosséis',          'descricao' => '5 carrosséis', 'thumbnail' => '', 'tipo' => 'pacote' ),
         ),
         'edicao-de-video' => array(
-            array( 'id' => 'video_longo',          'nome' => 'Vídeo Longo',               'descricao' => 'Um vídeo longo, perfeito para YouTube.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.png', 'tipo' => 'servico' ),
-            array( 'id' => 'video_curto',          'nome' => 'Vídeo Curto',               'descricao' => 'Um vídeo curto, ideal para redes sociais.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.png', 'tipo' => 'servico' ),
-            array( 'id' => 'thumbnail',            'nome' => 'Thumbnail',                  'descricao' => 'Thumbnail personalizada para seu vídeo.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.png', 'tipo' => 'servico' ),
+            array( 'id' => 'video_longo',          'nome' => 'Vídeo Longo',               'descricao' => 'Um vídeo longo, perfeito para YouTube.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'video_curto',          'nome' => 'Vídeo Curto',               'descricao' => 'Um vídeo curto, ideal para redes sociais.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-1.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'thumbnail',            'nome' => 'Thumbnail',                  'descricao' => 'Thumbnail personalizada para seu vídeo.', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services-2.webp', 'tipo' => 'servico' ),
             array( 'id' => 'mega_pacote',          'nome' => 'Mega Pacote Vídeo',          'descricao' => '5 longos + 10 curtos + 15 thumbnails', 'thumbnail' => '', 'tipo' => 'pacote' ),
             array( 'id' => 'pacote_premium_a',     'nome' => 'Pacote Premium A',           'descricao' => '5 vídeos longos + 5 thumbnails', 'thumbnail' => '', 'tipo' => 'pacote' ),
             array( 'id' => 'pacote_premium_b',     'nome' => 'Pacote Premium B',           'descricao' => '5 vídeos curtos + 5 thumbnails', 'thumbnail' => '', 'tipo' => 'pacote' ),
@@ -1470,22 +1473,22 @@ function odyssee_produtos_admin_page() {
         'motion' => array(
             array( 'id' => 'intro_animada',  'nome' => 'Intro Animada',      'descricao' => 'Uma intro simples e criativa com elementos 2D', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/FalaAiWillcomsom-ezgif.com-optimize.gif', 'tipo' => 'servico' ),
             array( 'id' => 'artmotion',      'nome' => 'Arte Animada',       'descricao' => 'Sua arte animada com elementos 2D', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/06/harley-animated-.gif', 'tipo' => 'servico' ),
-            array( 'id' => 'logomotion',     'nome' => 'Logo Animado',       'descricao' => 'Logo animado para vídeos e apresentações', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', 'tipo' => 'servico' ),
-            array( 'id' => 'motionmoldura',  'nome' => 'Moldura Animada',    'descricao' => 'Moldura animada para transmissões ao vivo', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', 'tipo' => 'servico' ),
-            array( 'id' => 'waitscreen',     'nome' => 'Tela de Espera',     'descricao' => 'Animação em looping para telas de espera', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', 'tipo' => 'servico' ),
-            array( 'id' => 'motionbanner',   'nome' => 'Banner Animado',     'descricao' => 'O banner da sua marca animado', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', 'tipo' => 'servico' ),
+            array( 'id' => 'logomotion',     'nome' => 'Logo Animado',       'descricao' => 'Logo animado para vídeos e apresentações', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'motionmoldura',  'nome' => 'Moldura Animada',    'descricao' => 'Moldura animada para transmissões ao vivo', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'waitscreen',     'nome' => 'Tela de Espera',     'descricao' => 'Animação em looping para telas de espera', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'motionbanner',   'nome' => 'Banner Animado',     'descricao' => 'O banner da sua marca animado', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', 'tipo' => 'servico' ),
         ),
         'ilustracao' => array(
-            array( 'id' => 'fanart_anime',             'nome' => 'Arte Estilo Anime',         'descricao' => 'Arte digital no estilo anime', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_14.png', 'tipo' => 'servico' ),
-            array( 'id' => 'fanart_cartoon',           'nome' => 'Arte Estilo Cartoon',       'descricao' => 'Arte digital no estilo cartoon', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_13.png', 'tipo' => 'servico' ),
-            array( 'id' => 'fanart_chibi',             'nome' => 'Arte Estilo Chibi',         'descricao' => 'Arte digital no estilo chibi', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_15.png', 'tipo' => 'servico' ),
-            array( 'id' => 'fanart_pixelart',          'nome' => 'Arte Estilo Pixel Art',     'descricao' => 'Arte digital no estilo pixel art', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_12.png', 'tipo' => 'servico' ),
-            array( 'id' => 'fanart_vetorial',          'nome' => 'Arte Estilo Vetorial',      'descricao' => 'Arte digital no estilo vetorial', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/05/Jinx-Powder-Vector-lightroom-scaled-e1747298364610.jpg', 'tipo' => 'servico' ),
-            array( 'id' => 'personagem_rpg',           'nome' => 'Personagem Token RPG',      'descricao' => 'Arte para RPG no estilo token', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.png', 'tipo' => 'servico' ),
-            array( 'id' => 'ilustracao_perfil',        'nome' => 'Ilustração Perfil/Busto',   'descricao' => 'Arte de perfil nos diversos estilos', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_11.png', 'tipo' => 'servico' ),
-            array( 'id' => 'ilustracao_corpo_inteiro', 'nome' => 'Ilustração Corpo Inteiro',  'descricao' => 'Arte de corpo inteiro nos diversos estilos', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_8.png', 'tipo' => 'servico' ),
-            array( 'id' => 'esboco_rapido',            'nome' => 'Esboço Rápido',             'descricao' => 'Um esboço rápido e simples', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_10.png', 'tipo' => 'servico' ),
-            array( 'id' => 'storyboard',               'nome' => 'Storyboard',                'descricao' => 'Storyboard cena a cena', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_9.png', 'tipo' => 'servico' ),
+            array( 'id' => 'fanart_anime',             'nome' => 'Arte Estilo Anime',         'descricao' => 'Arte digital no estilo anime', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_14.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'fanart_cartoon',           'nome' => 'Arte Estilo Cartoon',       'descricao' => 'Arte digital no estilo cartoon', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_13.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'fanart_chibi',             'nome' => 'Arte Estilo Chibi',         'descricao' => 'Arte digital no estilo chibi', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_15.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'fanart_pixelart',          'nome' => 'Arte Estilo Pixel Art',     'descricao' => 'Arte digital no estilo pixel art', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_12.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'fanart_vetorial',          'nome' => 'Arte Estilo Vetorial',      'descricao' => 'Arte digital no estilo vetorial', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/05/Jinx-Powder-Vector-lightroom-scaled-e1747298364610.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'personagem_rpg',           'nome' => 'Personagem Token RPG',      'descricao' => 'Arte para RPG no estilo token', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2025/12/art-card-services-motion.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'ilustracao_perfil',        'nome' => 'Ilustração Perfil/Busto',   'descricao' => 'Arte de perfil nos diversos estilos', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_11.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'ilustracao_corpo_inteiro', 'nome' => 'Ilustração Corpo Inteiro',  'descricao' => 'Arte de corpo inteiro nos diversos estilos', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_8.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'esboco_rapido',            'nome' => 'Esboço Rápido',             'descricao' => 'Um esboço rápido e simples', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_10.webp', 'tipo' => 'servico' ),
+            array( 'id' => 'storyboard',               'nome' => 'Storyboard',                'descricao' => 'Storyboard cena a cena', 'thumbnail' => 'https://odysseexp.com/wp-content/uploads/2026/01/art-card-services_9.webp', 'tipo' => 'servico' ),
             array( 'id' => 'cenario_digital',          'nome' => 'Cenário Digital',           'descricao' => 'Cenário digital completo', 'thumbnail' => '', 'tipo' => 'servico' ),
         ),
     );
@@ -1850,4 +1853,74 @@ function odyssee_produtos_admin_page() {
         <?php endif; ?>
     </div>
     <?php
+}
+
+// ==============================================
+// FUNÇÃO AUXILIAR: Obter posts iniciais pré-carregados (0ms latency)
+// ==============================================
+function odyssee_get_initial_posts() {
+    $args = array(
+        'post_type'              => 'post',
+        'post_status'            => 'publish',
+        'posts_per_page'         => 40,
+        'orderby'                => 'date',
+        'order'                  => 'DESC',
+        'no_found_rows'          => true,
+        'update_post_term_cache' => true,
+        'update_post_meta_cache' => true,
+    );
+    $query = new WP_Query( $args );
+    $posts = array();
+
+    if ( $query->have_posts() ) {
+        while ( $query->have_posts() ) {
+            $query->the_post();
+            $post_id = get_the_ID();
+
+            $img_url = get_the_post_thumbnail_url( $post_id, 'large' );
+            if ( ! $img_url ) {
+                $content = get_the_content();
+                if ( preg_match( '/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/', $content, $match ) ) {
+                    $img_url = 'https://img.youtube.com/vi/' . $match[1] . '/maxresdefault.webp';
+                }
+            }
+            if ( ! $img_url ) {
+                $img_url = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="200"%3E%3Crect width="300" height="200" fill="%23ccc"/%3E%3Ctext x="50%25" y="50%25" font-size="16" fill="%23999" text-anchor="middle" dy=".3em"%3ESem Imagem%3C/text%3E%3C/svg%3E';
+            }
+
+            $terms = get_the_terms( $post_id, 'category' );
+            $category_list = array('geral');
+            $sub_category_list = array();
+
+            if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+                $parents = array();
+                $children = array();
+                foreach ( $terms as $term ) {
+                    if ( $term->parent == 0 ) {
+                        $parents[] = $term->slug;
+                    } else {
+                        $children[] = $term->slug;
+                    }
+                }
+                if ( ! empty( $parents ) ) $category_list = $parents;
+                if ( ! empty( $children ) ) $sub_category_list = $children;
+            }
+
+            $posts[] = array(
+                'title'         => html_entity_decode( get_the_title(), ENT_QUOTES, 'UTF-8' ),
+                'titleEN'       => html_entity_decode( (string) get_post_meta( $post_id, 'post_title_en', true ), ENT_QUOTES, 'UTF-8' ),
+                'categories'    => $category_list,
+                'category'      => $category_list[0],
+                'subCategories' => $sub_category_list,
+                'subCategory'   => isset($sub_category_list[0]) ? $sub_category_list[0] : '',
+                'image'         => $img_url,
+                'date'          => get_the_date( 'c' ),
+                'link'          => get_permalink(),
+                'content'       => html_entity_decode( get_the_content(), ENT_QUOTES, 'UTF-8' ),
+            );
+        }
+        wp_reset_postdata();
+    }
+
+    return $posts;
 }

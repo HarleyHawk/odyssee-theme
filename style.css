@@ -3,7 +3,7 @@ Theme Name: Odyssee Experience
 Theme URI: https://odysseexp.com
 Author: Harley
 Description: Tema customizado para o site da Odyssee Experience, focado em uma estética moderna e vibrante, com opções de personalização de cores e modo escuro.
-Version: 26.7.6
+Version: 26.7.8
 /* ==========================
    VARIAVEIS GLOBAIS DO TEMA
    ==========================
@@ -4699,7 +4699,6 @@ body.theme-dark .service-notice {
 .section-title,
 .services-hero h1,
 .faq-title,
-.cv-title,
 .cv-section-title,
 .page-title {
     background: linear-gradient(90deg, var(--color-title) 0%, var(--color-accent) 50%, var(--color-title) 100%) !important;
@@ -4709,6 +4708,16 @@ body.theme-dark .service-notice {
     background-clip: text !important;
     color: transparent !important;
     animation: titleGradientMove 8s ease-in-out infinite !important;
+}
+
+/* Título de cargo abaixo do nome no CV (sempre branco puro com sombra para legibilidade) */
+.cv-hero .cv-title,
+.cv-title {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: none !important;
+    opacity: 1 !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* =========================================================
